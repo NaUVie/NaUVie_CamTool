@@ -61,12 +61,23 @@ document.addEventListener('DOMContentLoaded', () => {
   updateUTCClock();
   setupLeaderboard();
   
-  // Ticking loops
-  setInterval(() => {
-    tickAutoRefresh();
-    tickAutoHop();
-    updateUTCClock();
-  }, 1000);
+  // Ticking loops qua Web Worker (chạy ngầm không bị trình duyệt chặn)
+  if (window.Worker) {
+    const timerWorker = new Worker('timer-worker.js');
+    timerWorker.onmessage = () => {
+      tickAutoRefresh();
+      tickAutoHop();
+      updateUTCClock();
+    };
+    timerWorker.postMessage('start');
+  } else {
+    // Fallback cho trình duyệt không hỗ trợ Worker
+    setInterval(() => {
+      tickAutoRefresh();
+      tickAutoHop();
+      updateUTCClock();
+    }, 1000);
+  }
 });
 
 // Cài đặt chế độ hiển thị Card / List
@@ -668,7 +679,7 @@ function performRandomQuickJoin() {
 
 // Loops ticking timers
 function tickAutoRefresh() {
-  if (!isAutoRefreshChecked || document.visibilityState !== 'visible') return;
+  if (!isAutoRefreshChecked) return;
   
   autoRefreshTimer--;
   document.getElementById('auto-refresh-timer').textContent = `${autoRefreshTimer}s`;
@@ -682,8 +693,8 @@ function tickAutoRefresh() {
 
 function tickAutoHop() {
   const countdownSpan = document.getElementById('auto-hop-countdown-span');
-  if (!isAutoHopChecked || document.visibilityState !== 'visible') {
-    if (countdownSpan && !isAutoHopChecked) countdownSpan.textContent = '';
+  if (!isAutoHopChecked) {
+    if (countdownSpan) countdownSpan.textContent = '';
     return;
   }
   
