@@ -1,0 +1,1280 @@
+/* 
+   ==========================================================================
+   NaUVie Server Hop - Premium Cyber-Tech Space HUD & Translucent Glass
+   Aesthetic: Holographic Glassmorphism, Dual Theme (Sáng/Tối), Electric Cyan
+   ==========================================================================
+*/
+
+:root {
+  /* Default Dark Theme - Cosmic Carbon & Holographic Cyan */
+  --bg-main: #030305;       /* Deep Obsidian Space Black */
+  --bg-panel: rgba(10, 12, 18, 0.65); /* Translucent obsidian carbon */
+  --bg-card: rgba(20, 22, 33, 0.6);   /* Cyber card glass */
+  --bg-card-hover: rgba(25, 28, 42, 0.85);
+  --bg-input: #030305;
+  
+  /* Luminous Cybernetic Accents */
+  --primary-blue: #00f0ff;   /* Luminous Electric Cyan */
+  --primary-hover: #00bcd4;  /* Luminous Cyber Blue */
+  --success-green: #00ff87;  /* Digital Matrix Neon Green */
+  --warning-amber: #ffaa00;  /* System Warn Orange */
+  --danger-red: #ff3b30;     /* System Alert Red */
+  
+  /* High-Contrast Readability Texts */
+  --text-white: #ffffff;
+  --text-primary: #e2e8f0;   /* Light Metallic Slate */
+  --text-secondary: #94a3b8; /* Cool Grey */
+  --text-muted: #5e6b7d;     /* Deep HUD Grid Grey */
+  --text-dark: #334155;      /* Carbon Grey */
+  
+  /* Tech Fonts & Borders */
+  --font-main: 'Be Vietnam Pro', sans-serif;
+  --font-cyber: 'Space Grotesk', sans-serif;
+  --font-code: 'Courier New', Courier, monospace; /* Precise telemetry */
+  --cyber-border: rgba(0, 240, 255, 0.12);
+  --cyber-border-hover: rgba(0, 240, 255, 0.4);
+  
+  /* Glassmorphism filters */
+  --backdrop-blur: blur(10px) saturate(180%);
+  --card-blur: blur(6px);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  
+  --speed: 0.15s;
+}
+
+/* Light Theme overrides (Premium Ultra-Frost Glassmorphism) */
+body.light-theme {
+  --bg-main: #f3f4f6;                    /* Light pristine mist */
+  --bg-panel: rgba(255, 255, 255, 0.45);  /* Heavy frost translucent glass */
+  --bg-card: rgba(255, 255, 255, 0.55);   /* Heavy frost card glass */
+  --bg-card-hover: rgba(255, 255, 255, 0.85);
+  --bg-input: rgba(255, 255, 255, 0.8);
+  
+  /* Modern High-End Indigo & Sky Tech Accents */
+  --primary-blue: #4f46e5;    /* Premium Deep Indigo */
+  --primary-hover: #4338ca;   /* Deep Royal Indigo */
+  --success-green: #059669;   /* Emerald matrix */
+  --warning-amber: #d97706;   /* Rich warm amber */
+  --danger-red: #e11d48;      /* Cyber Rose Red */
+  
+  --text-white: #0f172a;      /* Slate 900 */
+  --text-primary: #1f2937;    /* Slate 800 */
+  --text-secondary: #4b5563;  /* Slate 600 */
+  --text-muted: #8b96a5;      /* Slate 400 */
+  --text-dark: #e5e7eb;       /* Grey 200 */
+  
+  --cyber-border: rgba(255, 255, 255, 0.7); /* Perfect white specular edge highlight */
+  --cyber-border-hover: rgba(79, 70, 229, 0.25);
+  
+  --glass-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Reset & Global */
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  background-image: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.03) 0%, transparent 50%);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  overflow-x: hidden;
+  line-height: 1.5;
+  transition: background-color var(--speed) ease, background-image var(--speed) ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.light-theme {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.07) 0px, transparent 50%), 
+    radial-gradient(at 50% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.04) 0px, transparent 40%);
+}
+
+/* ========================================================
+   Global Font Accents Mapping (Be Vietnam Pro & Space Grotesk)
+   ======================================================== */
+h1, h2, h3, h4, h5, h6,
+.panel-title,
+.nauvie-logo,
+.footer-logo,
+.timer-digits,
+.group-title,
+.btn-discord-link,
+.btn-contact-link,
+.btn-quick-join,
+.segment-btn,
+.right-tab-btn,
+.cam-hop-card__players-count,
+.indicator-badge,
+.value-text,
+.kicker {
+  font-family: var(--font-cyber) !important;
+}
+
+/* Clean scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-blue);
+}
+
+/* Clean Header Navbar */
+.nauvie-navbar {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--cyber-border);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color var(--speed) ease, border-color var(--speed) ease;
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nauvie-logo {
+  font-weight: 900;
+  font-size: 18px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: var(--text-white);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.logo-accent {
+  color: var(--primary-blue);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+  transition: color var(--speed) ease;
+}
+body.light-theme .logo-accent {
+  text-shadow: none;
+}
+
+.logo-main {
+  margin-left: 6px;
+  color: var(--text-white);
+}
+
+/* Theme glass button switcher */
+.theme-btn-glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all var(--speed) ease;
+}
+
+.theme-btn-glass:hover {
+  border-color: var(--primary-blue);
+  color: var(--text-white);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+}
+
+body.light-theme .theme-btn-glass:hover {
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.2);
+}
+
+/* Hologram Status online badge */
+.indicator-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 255, 135, 0.05);
+  border: 1px solid rgba(0, 255, 135, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--success-green);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.green-glow-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--success-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--success-green);
+}
+
+/* Main Centered Layout Container */
+.nauvie-main-dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 24px 48px 24px;
+  width: 100%;
+}
+
+/* Split-Screen Dashboard Structure */
+.split-screen-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .split-screen-container {
+    grid-template-columns: 340px 1fr;
+  }
+  
+  /* Sticky control sidebar on desktop */
+  .control-sidebar {
+    position: sticky;
+    top: 84px; /* navbar height (64px) + 20px gap */
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
+    padding-right: 4px; /* avoid scrollbar overlaps */
+  }
+}
+
+/* Hide scrollbars inside sidebar but allow smooth scrolling */
+.control-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.control-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Elegant Translucent Glass Panel Container */
+.nauvie-glass-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--cyber-border);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: background-color var(--speed) ease, border-color var(--speed) ease, box-shadow var(--speed) ease;
+}
+
+/* Next Boss Event Alert Bar */
+.boss-announcer {
+  background: rgba(255, 59, 48, 0.06);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  border-radius: 12px;
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+}
+
+.announcer-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  position: relative;
+}
+
+.icon-glow {
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 59, 48, 0.08);
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  color: var(--danger-red);
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.2);
+}
+
+.icon-glow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.announcer-text {
+  flex: 1;
+}
+
+.announcer-text .kicker {
+  font-size: 9px;
+  color: var(--danger-red);
+  font-weight: 700;
+  margin-bottom: 2px;
+  letter-spacing: 0.05em;
+}
+
+.announcer-text h3 {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: 2px;
+}
+
+.announcer-text p {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.gold-text {
+  color: var(--warning-amber);
+  font-weight: 600;
+}
+
+.announcer-timer {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.timer-digits {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--danger-red);
+  line-height: 1;
+  font-family: var(--font-code);
+  text-shadow: 0 0 8px rgba(255, 59, 48, 0.3);
+}
+body.light-theme .timer-digits {
+  text-shadow: none;
+}
+
+.timer-label {
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  font-weight: bold;
+}
+
+/* Control sidebar items */
+.control-card {
+  padding: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Segmented Control Chips */
+.segmented-control {
+  display: flex;
+  background: var(--bg-main);
+  border: 1px solid var(--cyber-border);
+  padding: 3px;
+  border-radius: 8px;
+  width: 100%;
+  transition: background-color var(--speed) ease, border-color var(--speed) ease;
+}
+
+.segment-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-grow: 1;
+  text-align: center;
+  transition: all var(--speed) ease;
+}
+
+.segment-btn:hover {
+  color: var(--text-white);
+}
+
+.segment-btn.active {
+  background: var(--bg-card);
+  color: var(--primary-blue);
+  box-shadow: inset 0 0 8px rgba(0, 240, 255, 0.05);
+}
+body.light-theme .segment-btn.active {
+  box-shadow: none;
+}
+
+/* Refresh Controls */
+.auto-refresh-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.cyber-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--cyber-border);
+  border-radius: 4px;
+  background: var(--bg-main);
+  cursor: pointer;
+  position: relative;
+  transition: background-color var(--speed) ease, border-color var(--speed) ease;
+}
+
+.cyber-checkbox:checked {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+.cyber-checkbox:checked::after {
+  content: '✔';
+  position: absolute;
+  font-size: 10px;
+  color: #000;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 900;
+}
+body.light-theme .cyber-checkbox:checked::after {
+  color: #fff;
+}
+
+/* Premium Luminous refresh button */
+.btn-refresh {
+  background: transparent;
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--speed) ease;
+}
+
+.btn-refresh:hover {
+  background-color: var(--primary-blue);
+  color: var(--bg-main);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+}
+body.light-theme .btn-refresh:hover {
+  color: #fff;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.35);
+}
+
+/* Quick Join */
+.btn-quick-join {
+  background: transparent;
+  border: 1px solid var(--success-green);
+  color: var(--success-green);
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--speed) ease;
+}
+
+.btn-quick-join:hover {
+  background-color: var(--success-green);
+  color: var(--bg-main);
+  box-shadow: 0 0 10px rgba(0, 255, 135, 0.35);
+}
+body.light-theme .btn-quick-join:hover {
+  color: #fff;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+}
+
+.auto-hop-lbl {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.cyber-select {
+  background: var(--bg-main);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-white);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: var(--font-main);
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--speed) ease, background-color var(--speed) ease, color var(--speed) ease;
+}
+
+.cyber-select:focus {
+  border-color: var(--primary-blue);
+}
+
+/* Hover effect on links */
+.btn-discord-link:hover {
+  opacity: 0.9 !important;
+  box-shadow: 0 0 10px rgba(88, 101, 242, 0.35);
+}
+
+.btn-contact-link:hover {
+  background-color: var(--bg-card-hover) !important;
+  border-color: var(--text-secondary) !important;
+}
+
+/* Loading Overlay */
+#loading-overlay {
+  background: rgba(3, 3, 5, 0.85);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: grid;
+  place-content: center;
+}
+
+#loading-overlay.hidden {
+  display: none !important;
+}
+
+.loading-box {
+  text-align: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--cyber-border);
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.glowing-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(0, 240, 255, 0.1);
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  margin: 0 auto 12px auto;
+  animation: spin 0.8s linear infinite;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.loading-title {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: bold;
+}
+
+/* ========================================================
+   NaUVie Hub ULTRA-PREMIUM CARD GRAPHICS (cam-hop-card)
+   ======================================================== */
+.servers-grid-container {
+  min-height: 200px;
+}
+
+.servers-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+  contain: layout;
+}
+
+@media (min-width: 600px) {
+  .servers-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .servers-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Holographic Cyber HUD Server Card styling */
+.cam-hop-card {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--cyber-border) !important;
+  /* Extreme scroll optimization: Remove nested backdrop-filters from child cards to prevent rendering pipeline lag */
+  border-radius: 10px;
+  padding: 14px 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  content-visibility: auto;
+  contain-intrinsic-size: 130px;
+  will-change: transform, border-color;
+  transform: translate3d(0, 0, 0); /* Force GPU compositing layer creation */
+  backface-visibility: hidden;    /* Prevent scroll text rendering jitter */
+  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.15s ease, background-color 0.15s ease !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-theme .cam-hop-card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important;
+}
+
+.cam-hop-card:hover {
+  transform: translateY(-2px) translateZ(0) !important;
+  border-color: var(--cyber-border-hover) !important;
+  background-color: var(--bg-card-hover) !important;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.12) !important;
+}
+body.light-theme .cam-hop-card:hover {
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Electric Left Occupancy Stripe */
+.cam-hop-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+}
+
+.cam-hop-card--empty::before { 
+  background-color: var(--primary-blue); 
+  box-shadow: 0 0 8px var(--primary-blue);
+}
+body.light-theme .cam-hop-card--empty::before {
+  box-shadow: none;
+}
+
+.cam-hop-card--open::before { 
+  background-color: var(--success-green); 
+  box-shadow: 0 0 8px var(--success-green);
+}
+body.light-theme .cam-hop-card--open::before {
+  box-shadow: none;
+}
+
+.cam-hop-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cam-hop-card__id {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-white);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-code);
+}
+
+.cam-hop-card__copy-btn {
+  background: var(--bg-main);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all var(--speed) ease;
+}
+
+.cam-hop-card__copy-btn:hover {
+  color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+}
+body.light-theme .cam-hop-card__copy-btn:hover {
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.2);
+}
+
+.cam-hop-card__tag {
+  font-size: 9px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: var(--font-code);
+}
+
+.cam-hop-card__tag--empty {
+  background: rgba(0, 240, 255, 0.08);
+  color: var(--primary-blue);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+body.light-theme .cam-hop-card__tag--empty {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.cam-hop-card__tag--open {
+  background: rgba(0, 255, 135, 0.08);
+  color: var(--success-green);
+  border: 1px solid rgba(0, 255, 135, 0.2);
+}
+body.light-theme .cam-hop-card__tag--open {
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.cam-hop-card__count-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cam-hop-card__count {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-white);
+  font-family: var(--font-code);
+}
+
+.cam-hop-card__count-sep {
+  color: var(--text-muted);
+  margin: 0 1px;
+}
+
+.cam-hop-card__count-cap {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.cam-hop-card__count-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+/* Custom player bar */
+.cam-hop-card__bar {
+  background: var(--bg-main);
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cam-hop-card__fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.cam-hop-card__fill--empty { 
+  background: var(--primary-blue); 
+  box-shadow: 0 0 6px var(--primary-blue);
+}
+body.light-theme .cam-hop-card__fill--empty {
+  box-shadow: none;
+}
+
+.cam-hop-card__fill--open { 
+  background: var(--success-green); 
+  box-shadow: 0 0 6px var(--success-green);
+}
+body.light-theme .cam-hop-card__fill--open {
+  box-shadow: none;
+}
+
+/* Precise telemetry HUD stats format */
+.cam-hop-card__meta {
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--cyber-border);
+  padding-top: 8px;
+  font-size: 11px;
+}
+
+.cam-hop-card__meta-cell {
+  display: flex;
+  gap: 3px;
+}
+
+.cam-hop-card__meta-k {
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+
+.cam-hop-card__meta-v {
+  color: var(--text-white);
+  font-weight: bold;
+  font-family: var(--font-code);
+}
+
+.cam-hop-card__meta-sep {
+  color: var(--cyber-border);
+}
+
+.cam-hop-card__meta-cell--poor .cam-hop-card__meta-v { color: var(--danger-red); }
+.cam-hop-card__meta-cell--fair .cam-hop-card__meta-v { color: var(--warning-amber); }
+.cam-hop-card__meta-cell--good .cam-hop-card__meta-v { color: var(--success-green); }
+
+/* Premium Cyber Hologram Join direct button */
+.cam-hop-card__join {
+  background: transparent;
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  justify-content: center;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all var(--speed) ease;
+}
+
+.cam-hop-card__join:hover {
+  background-color: var(--primary-blue);
+  color: var(--bg-main);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+}
+body.light-theme .cam-hop-card__join:hover {
+  color: #fff;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.35);
+}
+
+.cam-hop-card__join--opened {
+  background: var(--bg-card) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--cyber-border) !important;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+/* No servers placeholder */
+.no-servers-placeholder {
+  text-align: center;
+  border: 1px dashed var(--cyber-border);
+  padding: 32px;
+  border-radius: 10px;
+  background: var(--bg-panel);
+}
+
+.no-servers-placeholder .empty-title {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: bold;
+}
+
+.no-servers-placeholder .empty-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Show More Button */
+.btn-show-more {
+  background: var(--bg-panel);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-white);
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all var(--speed) ease;
+}
+
+.btn-show-more:hover {
+  background-color: var(--bg-card);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
+}
+body.light-theme .btn-show-more:hover {
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.15);
+}
+
+.remaining-count {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.btn-show-more.hidden {
+  display: none !important;
+}
+
+/* FAQ Accordion Help */
+.faq-accordion-section {
+  border-top: 1px solid var(--cyber-border);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.faq-accordion-head {
+  background: transparent;
+  border: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-white);
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.faq-chevron {
+  transition: transform 0.2s ease;
+  color: var(--text-muted);
+}
+.faq-chevron.active {
+  transform: rotate(180deg);
+  color: var(--text-white);
+}
+
+.faq-accordion-body {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-accordion-body.hidden {
+  display: none !important;
+}
+
+.faq-item {
+  background: var(--bg-main);
+  border: 1px solid var(--cyber-border);
+  padding: 14px;
+  border-radius: 8px;
+}
+
+.faq-item h5 {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-white);
+  margin-bottom: 4px;
+}
+
+.faq-item p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Clean Minimalist Footer */
+.nauvie-footer {
+  background: #020617;
+  border-top: 1px solid var(--cyber-border);
+  padding: 32px 24px;
+  margin-top: auto;
+  transition: background-color var(--speed) ease, border-color var(--speed) ease;
+}
+body.light-theme .nauvie-footer {
+  background: #e2e8f0;
+}
+
+.about-blurb {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-logo {
+  font-weight: 900;
+  font-size: 16px;
+  text-decoration: none;
+  color: var(--text-white);
+}
+
+.footer-bottom-bar {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ========================================================
+   Toast Notifications & Dynamic Slide Keyframe Animations
+   ======================================================== */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100000;
+}
+
+.toast {
+  background: var(--bg-panel);
+  border: 1px solid var(--primary-blue);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  color: var(--text-white);
+  padding: 14px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  max-width: 340px;
+  box-shadow: var(--glass-shadow);
+  animation: slideIn 0.3s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.toast--success {
+  border-color: var(--success-green);
+}
+
+.toast--error {
+  border-color: var(--danger-red);
+}
+
+/* Light Theme special component overrides */
+body.light-theme .boss-announcer {
+  background: rgba(220, 38, 38, 0.05) !important;
+  border: 1px solid rgba(220, 38, 38, 0.18) !important;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================================
+   Custom Light Theme Ultra-Premium Enhancements & Tweaks
+   ======================================================== */
+body.light-theme .segmented-control {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .segment-btn {
+  color: var(--text-secondary);
+}
+
+body.light-theme .segment-btn.active {
+  background: #ffffff !important;
+  color: var(--primary-blue) !important;
+  box-shadow: 0 2px 6px rgba(31, 41, 55, 0.08) !important;
+}
+
+body.light-theme .cyber-select {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+body.light-theme .cyber-checkbox {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+body.light-theme .indicator-badge {
+  background: rgba(5, 150, 105, 0.06);
+  border: 1px solid rgba(5, 150, 105, 0.18);
+  color: var(--success-green);
+}
+
+body.light-theme .green-glow-dot {
+  box-shadow: none;
+}
+
+body.light-theme .logo-accent {
+  background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========================================================
+   Tab Navigation Styles
+   ======================================================== */
+.right-tab-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--font-main);
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--speed) ease;
+  border: 1px solid transparent;
+  letter-spacing: 0.05em;
+}
+
+.right-tab-btn:hover {
+  color: var(--text-white);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.right-tab-btn.active {
+  color: var(--primary-blue);
+  background: var(--bg-card);
+  border: 1px solid var(--cyber-border);
+  box-shadow: var(--glass-shadow);
+}
+
+body.light-theme .right-tab-btn:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-theme .right-tab-btn.active {
+  background: #ffffff !important;
+  color: var(--primary-blue) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 2px 8px rgba(31, 41, 55, 0.06) !important;
+}
+
+/* ========================================================
+   List View Layout Mode Overrides
+   ======================================================== */
+.servers-card-grid.view-list-active {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card {
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 8px 16px !important;
+  gap: 16px !important;
+  min-height: 54px !important;
+  content-visibility: visible !important;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card::before {
+  width: 3px !important;
+  border-radius: 3px 0 0 3px !important;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card__head {
+  flex-shrink: 0;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card__count-row {
+  flex-shrink: 0;
+  width: 90px;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 4px;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card__count-label {
+  display: none !important;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card__bar {
+  flex-grow: 1 !important;
+  margin: 0 !important;
+  height: 6px !important;
+  max-width: 180px;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card__meta {
+  flex-shrink: 0;
+  width: 140px;
+  justify-content: flex-start;
+  margin: 0 !important;
+  gap: 8px !important;
+}
+
+.servers-card-grid.view-list-active .cam-hop-card__join {
+  flex-shrink: 0;
+  width: 100px !important;
+  margin-top: 0 !important;
+  padding: 6px 12px !important;
+  height: 32px !important;
+  font-size: 11px !important;
+}
+
+@media (max-width: 768px) {
+  .servers-card-grid.view-list-active .cam-hop-card__bar {
+    display: none !important;
+  }
+  
+  .servers-card-grid.view-list-active .cam-hop-card {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 10px 14px !important;
+  }
+}
