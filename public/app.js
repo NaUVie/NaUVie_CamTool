@@ -597,13 +597,19 @@ function setupEventListeners() {
     document.getElementById('auto-refresh-timer').textContent = `30s`;
     
     const pollingStatus = document.getElementById('polling-status-desc');
-    if (isAutoRefreshChecked) {
-      pollingStatus.textContent = 'Auto Polling (30s)';
-      pollingStatus.className = 'value-text text-green';
-      showToast('info', 'Đã kích hoạt tự động quét danh sách sau mỗi 30 giây.');
+    if (pollingStatus) {
+      if (isAutoRefreshChecked) {
+        pollingStatus.textContent = 'Auto Polling (30s)';
+        pollingStatus.className = 'value-text text-green';
+        showToast('info', 'Đã kích hoạt tự động quét danh sách sau mỗi 30 giây.');
+      } else {
+        pollingStatus.textContent = 'Quét thủ công';
+        pollingStatus.className = 'value-text';
+      }
     } else {
-      pollingStatus.textContent = 'Quét thủ công';
-      pollingStatus.className = 'value-text';
+      if (isAutoRefreshChecked) {
+        showToast('info', 'Đã kích hoạt tự động quét danh sách sau mỗi 30 giây.');
+      }
     }
   });
 
