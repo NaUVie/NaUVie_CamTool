@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "public": true,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/servers.js" }
-  ],
   "builds": [
     { "src": "api/**/*.js", "use": "@vercel/node" },
     { "src": "public/**", "use": "@vercel/static" }
   ],
+  "rewrites": [
+    { "source": "/api/servers", "destination": "/api/servers.js" }
+  ],
   "routes": [
+    { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
