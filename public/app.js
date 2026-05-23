@@ -872,10 +872,21 @@ function startSilentAudioKeepAlive() {
     
     osc.start(0);
     
+    // Explicitly resume the AudioContext to ensure it active immediately
+    if (silentAudioCtx.state === 'suspended') {
+      silentAudioCtx.resume().then(() => {
+        console.log("[KEEP-ALIVE] AudioContext explicitly resumed on click. State:", silentAudioCtx.state);
+      });
+    } else {
+      console.log("[KEEP-ALIVE] AudioContext started in active state:", silentAudioCtx.state);
+    }
+    
     // Keep AudioContext resumed if suspended by browser autoplay policies
     setInterval(() => {
       if (silentAudioCtx && silentAudioCtx.state === 'suspended') {
-        silentAudioCtx.resume();
+        silentAudioCtx.resume().then(() => {
+          console.log("[KEEP-ALIVE] Resumed suspended AudioContext in background loop.");
+        });
       }
     }, 1000);
     
