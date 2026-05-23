@@ -61,6 +61,43 @@ document.addEventListener('DOMContentLoaded', () => {
   updateUTCClock();
   setupLeaderboard();
   
+  // Khởi tạo trạng thái Auto Hop/Refresh lưu từ trước khi reload
+  const isAutoHopActiveSaved = localStorage.getItem('nauvie_is_auto_hop_active') === 'true';
+  const isAutoRefreshActiveSaved = localStorage.getItem('nauvie_auto_refresh_active') === 'true';
+  
+  if (isAutoHopActiveSaved) {
+    isAutoHopChecked = true;
+    const autoHopCheck = document.getElementById('server-hop-auto-random');
+    if (autoHopCheck) autoHopCheck.checked = true;
+    
+    // Khôi phục đồng hồ đếm ngược
+    const timerSelect = document.getElementById('server-hop-timer-select');
+    const selectedSeconds = parseInt(timerSelect ? timerSelect.value : '60');
+    autoHopTimer = selectedSeconds;
+    
+    const countdownSpan = document.getElementById('auto-hop-countdown-span');
+    if (countdownSpan) countdownSpan.textContent = ` (${autoHopTimer}s)`;
+  }
+  
+  if (isAutoRefreshActiveSaved) {
+    isAutoRefreshChecked = true;
+    const autoRefreshCheck = document.getElementById('server-hop-auto-refresh');
+    if (autoRefreshCheck) autoRefreshCheck.checked = true;
+  }
+
+  // Khởi chạy Roblox ngay lập tức nếu có tác vụ Auto Hop đang chờ (Bypass user gesture của Chrome cực kỳ vi diệu)
+  const pendingAutoHopJobId = localStorage.getItem('nauvie_pending_auto_hop');
+  if (pendingAutoHopJobId) {
+    localStorage.removeItem('nauvie_pending_auto_hop');
+    const link = `roblox://experiences/start?placeId=${PLACE_ID}&gameInstanceId=${pendingAutoHopJobId}`;
+    
+    setTimeout(() => {
+      window.location.href = link;
+      recordHop(pendingAutoHopJobId);
+      showToast('success', 'NaUVie Auto Hop! Đang kết nối phòng mới tự động...');
+    }, 400);
+  }
+  
   // Ticking loops qua Inline Web Worker (Chạy ngầm không cần load file ngoài, 100% thành công)
   try {
     const workerCode = `
@@ -456,9 +493,23 @@ function renderGrid() {
 }
 
 // Join server qua Roblox Protocol URI
-function joinRobloxServer(jobId) {
+function joinRobloxServer(jobId, isAutoTriggered = false) {
   const link = `roblox://experiences/start?placeId=${PLACE_ID}&gameInstanceId=${jobId}`;
   
+  if (isAutoTriggered) {
+    // Tự động nhảy phòng chạy ngầm: Tải lại trang để bypass chặn "user gesture" của Chrome
+    localStorage.setItem('nauvie_pending_auto_hop', jobId);
+    localStorage.setItem('nauvie_is_auto_hop_active', 'true');
+    localStorage.setItem('nauvie_auto_refresh_active', isAutoRefreshChecked ? 'true' : 'false');
+    
+    showToast('info', 'Đang tự động chuyển trang để kết nối game...');
+    setTimeout(() => {
+      window.location.reload();
+    }, 150);
+    return;
+  }
+  
+  // Click thủ công: Mở trực tiếp bình thường
   showToast('info', 'Đang kết nối Roblox Launcher...');
   window.location.href = link;
   
@@ -595,6 +646,7 @@ function setupEventListeners() {
     isAutoRefreshChecked = e.target.checked;
     autoRefreshTimer = 30;
     document.getElementById('auto-refresh-timer').textContent = `30s`;
+    localStorage.setItem('nauvie_auto_refresh_active', isAutoRefreshChecked ? 'true' : 'false');
     
     const pollingStatus = document.getElementById('polling-status-desc');
     if (pollingStatus) {
@@ -620,6 +672,7 @@ function setupEventListeners() {
 
   autoHopCheck.addEventListener('change', (e) => {
     isAutoHopChecked = e.target.checked;
+    localStorage.setItem('nauvie_is_auto_hop_active', isAutoHopChecked ? 'true' : 'false');
     
     if (isAutoHopChecked) {
       const selectedSeconds = parseInt(timerSelect.value);
@@ -669,7 +722,7 @@ function setupEventListeners() {
 }
 
 // Logic Thuật toán Hợp Phòng Nhanh
-function performRandomQuickJoin() {
+function performRandomQuickJoin(isAutoTriggered = false) {
   // Tìm các server từ 2-4 người chưa nhảy qua
   let pool = allServers.filter(s => s.playing >= 2 && s.playing <= 4 && !openedServers.has(s.id));
   
@@ -695,7 +748,7 @@ function performRandomQuickJoin() {
     const chosen = pool[randomIndex];
     
     showToast('success', `NaUVie Hop Nhanh! Đang kết nối phòng ${chosen.id.substring(0,8)} (${chosen.playing} người).`);
-    joinRobloxServer(chosen.id);
+    joinRobloxServer(chosen.id, isAutoTriggered);
   } else {
     showToast('error', 'Không có server khả dụng để hop nhanh. Hãy quét lại danh sách.');
   }
@@ -731,7 +784,7 @@ function tickAutoHop() {
     const timerSelect = document.getElementById('server-hop-timer-select');
     autoHopTimer = parseInt(timerSelect ? timerSelect.value : '60');
     if (countdownSpan) countdownSpan.textContent = ` (${autoHopTimer}s)`;
-    performRandomQuickJoin();
+    performRandomQuickJoin(true);
   }
 }
 
