@@ -826,3 +826,47 @@ function setupLeaderboard() {
     };
   });
 }
+
+// ========================================================
+// Background Keep-Alive Audio Hack (Bypass Browser Throttling)
+// ========================================================
+let silentAudioCtx = null;
+let silentAudioInterval = null;
+
+function startSilentAudioKeepAlive() {
+  if (silentAudioCtx) return; // Already initialized
+  
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    
+    silentAudioCtx = new AudioContextClass();
+    
+    // Create a 1-second silent buffer
+    const buffer = silentAudioCtx.createBuffer(1, silentAudioCtx.sampleRate, silentAudioCtx.sampleRate);
+    
+    const playSilence = () => {
+      if (!silentAudioCtx) return;
+      if (silentAudioCtx.state === 'suspended') {
+        silentAudioCtx.resume();
+      }
+      const source = silentAudioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(silentAudioCtx.destination);
+      source.start(0);
+    };
+    
+    // Play a tiny slice of silence every 500ms to keep the audio pipeline warm.
+    // Modern browsers will NEVER throttle tabs that are actively playing audio.
+    silentAudioInterval = setInterval(playSilence, 500);
+    console.log("[KEEP-ALIVE] Silent audio keep-alive activated. Tab will run at 100% speed even in background!");
+  } catch (err) {
+    console.warn("[KEEP-ALIVE] Failed to initialize silent audio:", err);
+  }
+}
+
+// Hook onto the first user interaction to comply with browser autoplay policies
+['click', 'touchstart', 'keydown'].forEach(evt => {
+  window.addEventListener(evt, startSilentAudioKeepAlive, { once: true, passive: true });
+});
+
