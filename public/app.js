@@ -61,17 +61,35 @@ document.addEventListener('DOMContentLoaded', () => {
   updateUTCClock();
   setupLeaderboard();
   
-  // Ticking loops qua Web Worker (chạy ngầm không bị trình duyệt chặn)
-  if (window.Worker) {
-    const timerWorker = new Worker('timer-worker.js');
+  // Ticking loops qua Inline Web Worker (Chạy ngầm không cần load file ngoài, 100% thành công)
+  try {
+    const workerCode = `
+      let interval = null;
+      self.onmessage = function(e) {
+        if (e.data === 'start') {
+          if (interval) clearInterval(interval);
+          interval = setInterval(() => {
+            self.postMessage('tick');
+          }, 1000);
+        } else if (e.data === 'stop') {
+          if (interval) clearInterval(interval);
+          interval = null;
+        }
+      };
+    `;
+    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    const workerUrl = URL.createObjectURL(blob);
+    const timerWorker = new Worker(workerUrl);
+    
     timerWorker.onmessage = () => {
       tickAutoRefresh();
       tickAutoHop();
       updateUTCClock();
     };
     timerWorker.postMessage('start');
-  } else {
-    // Fallback cho trình duyệt không hỗ trợ Worker
+    console.log("[KEEP-ALIVE] Inline Web Worker started successfully!");
+  } catch (err) {
+    console.warn("[KEEP-ALIVE] Inline Web Worker failed, falling back to setInterval:", err);
     setInterval(() => {
       tickAutoRefresh();
       tickAutoHop();
