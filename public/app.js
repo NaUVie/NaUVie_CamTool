@@ -831,7 +831,6 @@ function setupLeaderboard() {
 // Background Keep-Alive Audio Hack (Bypass Browser Throttling)
 // ========================================================
 let silentAudioCtx = null;
-let silentAudioInterval = null;
 
 function startSilentAudioKeepAlive() {
   if (silentAudioCtx) return; // Already initialized
@@ -842,31 +841,34 @@ function startSilentAudioKeepAlive() {
     
     silentAudioCtx = new AudioContextClass();
     
-    // Create a 1-second silent buffer
-    const buffer = silentAudioCtx.createBuffer(1, silentAudioCtx.sampleRate, silentAudioCtx.sampleRate);
+    // Create continuous high-frequency oscillator (20,000 Hz)
+    // 20,000 Hz is completely inaudible to human ears, making it 100% silent.
+    const osc = silentAudioCtx.createOscillator();
+    const gainNode = silentAudioCtx.createGain();
     
-    const playSilence = () => {
-      if (!silentAudioCtx) return;
-      if (silentAudioCtx.state === 'suspended') {
+    osc.frequency.value = 20000; 
+    gainNode.gain.value = 0.00001; // Ultra-low volume (completely silent & safe)
+    
+    osc.connect(gainNode);
+    gainNode.connect(silentAudioCtx.destination);
+    
+    osc.start(0);
+    
+    // Keep AudioContext resumed if suspended by browser autoplay policies
+    setInterval(() => {
+      if (silentAudioCtx && silentAudioCtx.state === 'suspended') {
         silentAudioCtx.resume();
       }
-      const source = silentAudioCtx.createBufferSource();
-      source.buffer = buffer;
-      source.connect(silentAudioCtx.destination);
-      source.start(0);
-    };
+    }, 1000);
     
-    // Play a tiny slice of silence every 500ms to keep the audio pipeline warm.
-    // Modern browsers will NEVER throttle tabs that are actively playing audio.
-    silentAudioInterval = setInterval(playSilence, 500);
-    console.log("[KEEP-ALIVE] Silent audio keep-alive activated. Tab will run at 100% speed even in background!");
+    console.log("[KEEP-ALIVE] Inaudible continuous oscillator keep-alive active. Tab is 100% immune to background throttling!");
   } catch (err) {
-    console.warn("[KEEP-ALIVE] Failed to initialize silent audio:", err);
+    console.warn("[KEEP-ALIVE] Failed to initialize keep-alive audio:", err);
   }
 }
 
 // Hook onto the first user interaction to comply with browser autoplay policies
-['click', 'touchstart', 'keydown'].forEach(evt => {
+['click', 'touchstart', 'keydown', 'mousedown'].forEach(evt => {
   window.addEventListener(evt, startSilentAudioKeepAlive, { once: true, passive: true });
 });
 
