@@ -64,6 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Khởi tạo trạng thái Auto Hop/Refresh lưu từ trước khi reload
   const isAutoHopActiveSaved = localStorage.getItem('nauvie_is_auto_hop_active') === 'true';
   const isAutoRefreshActiveSaved = localStorage.getItem('nauvie_auto_refresh_active') === 'true';
+  const savedTimerValue = localStorage.getItem('nauvie_auto_hop_timer_value') || '60';
+  
+  // Thiết lập giá trị select từ trước
+  const timerSelect = document.getElementById('server-hop-timer-select');
+  if (timerSelect) {
+    timerSelect.value = savedTimerValue;
+  }
   
   if (isAutoHopActiveSaved) {
     isAutoHopChecked = true;
@@ -71,9 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (autoHopCheck) autoHopCheck.checked = true;
     
     // Khôi phục đồng hồ đếm ngược
-    const timerSelect = document.getElementById('server-hop-timer-select');
-    const selectedSeconds = parseInt(timerSelect ? timerSelect.value : '60');
-    autoHopTimer = selectedSeconds;
+    autoHopTimer = parseInt(savedTimerValue);
     
     const countdownSpan = document.getElementById('auto-hop-countdown-span');
     if (countdownSpan) countdownSpan.textContent = ` (${autoHopTimer}s)`;
@@ -673,6 +678,7 @@ function setupEventListeners() {
   autoHopCheck.addEventListener('change', (e) => {
     isAutoHopChecked = e.target.checked;
     localStorage.setItem('nauvie_is_auto_hop_active', isAutoHopChecked ? 'true' : 'false');
+    localStorage.setItem('nauvie_auto_hop_timer_value', timerSelect.value);
     
     if (isAutoHopChecked) {
       const selectedSeconds = parseInt(timerSelect.value);
@@ -685,6 +691,7 @@ function setupEventListeners() {
   });
 
   timerSelect.addEventListener('change', () => {
+    localStorage.setItem('nauvie_auto_hop_timer_value', timerSelect.value);
     if (isAutoHopChecked) {
       const selectedSeconds = parseInt(timerSelect.value);
       autoHopTimer = selectedSeconds;
