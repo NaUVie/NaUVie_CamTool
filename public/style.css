@@ -157,6 +157,28 @@ h1, h2, h3, h4, h5, h6,
   justify-content: space-between;
 }
 
+@media (max-width: 767px) {
+  .navbar-container {
+    height: auto !important;
+    flex-direction: column;
+    padding: 12px 16px !important;
+    gap: 12px;
+  }
+  
+  .navbar-container > :not(.nav-links) {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar-container > div {
+    display: flex;
+    justify-content: flex-end;
+    width: auto !important;
+  }
+}
+
 .nauvie-logo {
   font-weight: 900;
   font-size: 18px;
@@ -180,6 +202,76 @@ body.light-theme .logo-accent {
 .logo-main {
   margin-left: 6px;
   color: var(--text-white);
+}
+
+/* Header Navigation Tabs */
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  .nav-links {
+    width: 100% !important;
+    justify-content: space-between;
+    gap: 8px !important;
+    border-top: 1px solid var(--cyber-border);
+    padding-top: 10px;
+  }
+  
+  body.light-theme .nav-links {
+    border-top-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .nav-item {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    font-size: 10.5px !important;
+    padding: 8px 12px !important;
+  }
+  
+  .nav-item svg {
+    display: none !important;
+  }
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-cyber);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all var(--speed) ease;
+}
+
+.nav-item:hover {
+  color: var(--text-white);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+body.light-theme .nav-item:hover {
+  color: var(--text-white);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.nav-item.active {
+  color: var(--primary-blue);
+  background: rgba(0, 240, 255, 0.05);
+  border-color: rgba(0, 240, 255, 0.15);
+}
+
+body.light-theme .nav-item.active {
+  color: var(--primary-blue);
+  background: rgba(79, 70, 229, 0.06);
+  border-color: rgba(79, 70, 229, 0.15);
 }
 
 /* Theme glass button switcher */

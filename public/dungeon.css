@@ -1,0 +1,845 @@
+/* 
+   ==========================================================================
+   NaUVie Hub - Streamlined Dungeon Pricing Table Stylesheet
+   Design: Center-Focused Dual Theme Cyberpunk HUD, Premium Table Accents
+   ==========================================================================
+*/
+
+/* Centered Container */
+.dungeon-centered-layout {
+  max-width: 1000px !important;
+  margin: 0 auto;
+  padding: 24px 20px 48px 20px;
+}
+
+/* Hero Section */
+.dungeon-hero-section {
+  position: relative;
+  border-radius: 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--cyber-border);
+  padding: 40px 24px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+}
+
+.dungeon-hero-glow {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.light-theme .dungeon-hero-glow {
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.06) 0%, transparent 70%);
+}
+
+.dungeon-hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.hero-kicker {
+  font-family: var(--font-cyber);
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--primary-blue);
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: var(--font-cyber);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--text-white);
+  line-height: 1.2;
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+}
+
+body.light-theme .hero-title {
+  text-shadow: none;
+}
+
+.hero-subtitle {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Policy HUD Bar */
+.policy-hud-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  background: rgba(0, 240, 255, 0.02);
+  border: 1px dashed var(--cyber-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+}
+
+.policy-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-cyber);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+}
+
+.policy-check {
+  color: var(--success-green);
+  font-weight: 900;
+}
+
+/* Header Navigation Tabs */
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  .nav-links {
+    width: 100% !important;
+    justify-content: space-between;
+    gap: 8px !important;
+    border-top: 1px solid var(--cyber-border);
+    padding-top: 10px;
+  }
+  
+  body.light-theme .nav-links {
+    border-top-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .nav-item {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    font-size: 10.5px !important;
+    padding: 8px 12px !important;
+  }
+  
+  .nav-item svg {
+    display: none !important;
+  }
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-cyber);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all var(--speed) ease;
+}
+
+.nav-item:hover {
+  color: var(--text-white);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.nav-item.active {
+  color: var(--primary-blue);
+  background: rgba(0, 240, 255, 0.05);
+  border-color: rgba(0, 240, 255, 0.15);
+}
+
+body.light-theme .nav-item.active {
+  color: var(--primary-blue);
+  background: rgba(79, 70, 229, 0.06);
+  border-color: rgba(79, 70, 229, 0.15);
+}
+
+/* Section Title */
+.section-title-hud {
+  font-family: var(--font-cyber);
+  font-size: 11.5px;
+  font-weight: 900;
+  color: var(--text-white);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--cyber-border);
+}
+
+/* Premium Pricing Table */
+.pricing-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--cyber-border);
+  border-radius: 12px;
+  background: var(--bg-panel);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  box-shadow: var(--glass-shadow);
+  margin-bottom: 24px;
+}
+
+.premium-pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 700px;
+}
+
+.premium-pricing-table th {
+  font-family: var(--font-cyber);
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  padding: 16px;
+  border-bottom: 2px solid var(--cyber-border);
+  background: rgba(255, 255, 255, 0.01);
+  text-transform: uppercase;
+}
+
+.premium-pricing-table td {
+  padding: 18px 16px;
+  border-bottom: 1px solid var(--cyber-border);
+  vertical-align: middle;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.premium-pricing-table tr:last-child td {
+  border-bottom: none;
+}
+
+.premium-pricing-table tr {
+  transition: background var(--speed) ease;
+}
+
+.premium-pricing-table tr:hover {
+  background: rgba(0, 240, 255, 0.015);
+}
+
+body.light-theme .premium-pricing-table tr:hover {
+  background: rgba(79, 70, 229, 0.02);
+}
+
+/* Service Info Cell */
+.service-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.service-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.dot-normal {
+  background: var(--primary-blue);
+  box-shadow: 0 0 8px var(--primary-blue);
+}
+
+.dot-hard {
+  background: var(--warning-amber);
+  box-shadow: 0 0 8px var(--warning-amber);
+}
+
+.dot-nightmare {
+  background: var(--danger-red);
+  box-shadow: 0 0 8px var(--danger-red);
+}
+
+.dot-token {
+  background: var(--success-green);
+  box-shadow: 0 0 8px var(--success-green);
+}
+
+.dot-fragment {
+  background: #d946ef;
+  box-shadow: 0 0 8px #d946ef;
+}
+
+.service-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.service-name {
+  font-family: var(--font-cyber);
+  font-weight: 700;
+  color: var(--text-white);
+  font-size: 13.5px;
+}
+
+.service-badge-tag {
+  font-family: var(--font-code);
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  width: max-content;
+}
+
+.tag-normal {
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--primary-blue);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.tag-hard {
+  background: rgba(255, 170, 0, 0.1);
+  color: var(--warning-amber);
+  border: 1px solid rgba(255, 170, 0, 0.2);
+}
+
+.tag-nightmare {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--danger-red);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+}
+
+.tag-token {
+  background: rgba(0, 255, 135, 0.1);
+  color: var(--success-green);
+  border: 1px solid rgba(0, 255, 135, 0.2);
+}
+
+.tag-fragment {
+  background: rgba(217, 70, 239, 0.1);
+  color: #d946ef;
+  border: 1px solid rgba(217, 70, 239, 0.2);
+}
+
+.price-col {
+  font-family: var(--font-cyber);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text-white);
+}
+
+.highlight-price {
+  color: var(--primary-blue);
+}
+
+.price-unit {
+  font-size: 10.5px;
+  font-weight: normal;
+  color: var(--text-muted);
+}
+
+.note-col {
+  line-height: 1.4;
+  color: var(--text-secondary);
+  max-width: 320px;
+}
+
+/* Discord Massive CTA bottom */
+.discord-contact-card {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--cyber-border);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  overflow: hidden;
+  text-align: center;
+}
+
+.discord-card-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.discord-card-title {
+  font-family: var(--font-cyber);
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text-white);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.discord-card-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.btn-discord-massive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #5865f2;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: var(--font-cyber);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  padding: 14px 36px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+  transition: all var(--speed) ease;
+}
+
+.btn-discord-massive:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(88, 101, 242, 0.55);
+}
+
+/* Carry Status Online Badge Pulse */
+.carry-status-badge {
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  color: var(--primary-blue);
+}
+
+.carry-status-badge .green-glow-dot {
+  background: var(--primary-blue);
+  box-shadow: 0 0 8px var(--primary-blue);
+  animation: pulse-glow-cyan 2s infinite;
+}
+
+@keyframes pulse-glow-cyan {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(0, 240, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0);
+  }
+}
+
+/* ==========================================================================
+   Premium light-theme Overrides for Pricing Table (Ultra-Frost Glassmorphism)
+   ========================================================================= */
+body.light-theme {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.07) 0px, transparent 50%), 
+    radial-gradient(at 50% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.04) 0px, transparent 40%) !important;
+}
+
+body.light-theme .dungeon-hero-section {
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.04);
+}
+
+body.light-theme .dungeon-hero-glow {
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.05) 0%, transparent 70%);
+}
+
+body.light-theme .hero-title {
+  color: #0f172a;
+  text-shadow: none;
+}
+
+body.light-theme .hero-subtitle {
+  color: #4b5563;
+}
+
+body.light-theme .policy-hud-bar {
+  background: rgba(79, 70, 229, 0.02);
+  border-color: rgba(79, 70, 229, 0.15);
+}
+
+body.light-theme .section-title-hud {
+  color: #4f46e5;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .pricing-table-container {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .premium-pricing-table th {
+  background-color: #f8fafc !important;
+  color: #334155 !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+}
+
+body.light-theme .premium-pricing-table td {
+  color: #334155 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+body.light-theme .premium-pricing-table tr:hover {
+  background-color: #f1f5f9 !important;
+}
+
+body.light-theme .service-name {
+  color: #0f172a;
+}
+
+body.light-theme .price-col {
+  color: #0f172a;
+}
+
+body.light-theme .highlight-price {
+  color: #2563eb;
+}
+
+body.light-theme .price-unit {
+  color: #64748b;
+}
+
+body.light-theme .note-col {
+  color: #4b5563;
+}
+
+body.light-theme .discord-contact-card {
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.04);
+}
+
+body.light-theme .discord-card-title {
+  color: #0f172a;
+}
+
+body.light-theme .discord-card-desc {
+  color: #4b5563;
+}
+
+body.light-theme .btn-discord-massive {
+  background: #4f46e5;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
+  color: #ffffff;
+}
+
+body.light-theme .btn-discord-massive:hover {
+  background: #4338ca;
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+}
+
+/* Dots and Badges Light Theme overrides */
+body.light-theme .dot-normal {
+  background: #2563eb;
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+
+body.light-theme .dot-hard {
+  background: #ea580c;
+  box-shadow: 0 0 6px rgba(234, 88, 12, 0.3);
+}
+
+body.light-theme .dot-nightmare {
+  background: #dc2626;
+  box-shadow: 0 0 6px rgba(220, 38, 38, 0.3);
+}
+
+body.light-theme .dot-token {
+  background: #16a34a;
+  box-shadow: 0 0 6px rgba(22, 163, 74, 0.3);
+}
+
+body.light-theme .dot-fragment {
+  background: #9333ea;
+  box-shadow: 0 0 6px rgba(147, 51, 234, 0.3);
+}
+
+body.light-theme .tag-normal {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+body.light-theme .tag-hard {
+  background: rgba(234, 88, 12, 0.08);
+  color: #ea580c;
+  border: 1px solid rgba(234, 88, 12, 0.15);
+}
+
+body.light-theme .tag-nightmare {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+body.light-theme .tag-token {
+  background: rgba(22, 163, 74, 0.08);
+  color: #16a34a;
+  border: 1px solid rgba(22, 163, 74, 0.15);
+}
+
+body.light-theme .tag-fragment {
+  background: rgba(147, 51, 234, 0.08);
+  color: #9333ea;
+  border: 1px solid rgba(147, 51, 234, 0.15);
+}
+
+/* Carry Status Online Badge Pulse - Light Theme */
+body.light-theme .carry-status-badge {
+  background: rgba(79, 70, 229, 0.05);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  color: #4f46e5;
+}
+
+body.light-theme .carry-status-badge .green-glow-dot {
+  background: #4f46e5;
+  box-shadow: 0 0 8px #4f46e5;
+  animation: pulse-glow-indigo 2s infinite;
+}
+
+@keyframes pulse-glow-indigo {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+/* ==========================================================================
+   Mobile Responsive Table-to-Card Transformation (Screens < 768px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  /* Center focused layout spacing on mobile */
+  .dungeon-centered-layout {
+    padding: 12px 12px 32px 12px !important;
+  }
+
+  /* Hero Section spacing adjustments for mobile */
+  .dungeon-hero-section {
+    padding: 24px 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero-title {
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+  }
+
+  .hero-subtitle {
+    font-size: 12px !important;
+  }
+  
+  /* Policy HUD Bar adjustments for mobile */
+  .policy-hud-bar {
+    padding: 10px !important;
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .policy-item {
+    font-size: 10px !important;
+  }
+
+  /* Remove border/shadow/bg from the main container on mobile to prevent nesting */
+  .pricing-table-container {
+    border: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  /* Hide table header completely */
+  .premium-pricing-table thead {
+    display: none !important;
+  }
+
+  /* Make table, tbody, and tr block layout */
+  .premium-pricing-table {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important; /* CRITICAL FIX: Overrides desktop min-width: 700px */
+    box-sizing: border-box !important;
+  }
+
+  .premium-pricing-table tbody,
+  .premium-pricing-table tr {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Style each table row as a stunning card with left border indicator */
+  .premium-pricing-table tr {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--cyber-border) !important;
+    border-radius: 10px !important;
+    padding: 16px 18px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    position: relative !important;
+    transition: transform var(--speed) ease, border-color var(--speed) ease !important;
+    overflow: hidden;
+  }
+
+  /* Hover state for row cards on mobile */
+  .premium-pricing-table tr:hover {
+    transform: translateY(-2px) !important;
+    border-color: var(--cyber-border-hover) !important;
+    background: var(--bg-card-hover) !important;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.1) !important;
+  }
+
+  /* Left accent stripe indicators for mobile row cards */
+  .premium-pricing-table tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .premium-pricing-table tr.row-normal::before {
+    background: var(--primary-blue);
+    box-shadow: 0 0 8px var(--primary-blue);
+  }
+
+  .premium-pricing-table tr.row-hard::before {
+    background: var(--warning-amber);
+    box-shadow: 0 0 8px var(--warning-amber);
+  }
+
+  .premium-pricing-table tr.row-nightmare::before {
+    background: var(--danger-red);
+    box-shadow: 0 0 8px var(--danger-red);
+  }
+
+  .premium-pricing-table tr.row-token::before {
+    background: var(--success-green);
+    box-shadow: 0 0 8px var(--success-green);
+  }
+
+  .premium-pricing-table tr.row-fragment::before {
+    background: #d946ef;
+    box-shadow: 0 0 8px #d946ef;
+  }
+
+  /* Style each table cell as a flex row with label and value */
+  .premium-pricing-table td {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    font-size: 13px !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .premium-pricing-table td:last-child {
+    border-bottom: none !important;
+  }
+
+  /* Row Title (First TD): Styled like a gorgeous Card Header */
+  .premium-pricing-table td:nth-child(1) {
+    justify-content: flex-start !important;
+    border-bottom: 1px solid var(--cyber-border) !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Programmatically add column labels for pricing and notes on mobile */
+  .premium-pricing-table td:nth-child(2)::before {
+    content: 'Key của bạn:';
+    font-family: var(--font-cyber);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  .premium-pricing-table td:nth-child(3)::before {
+    content: 'Key của shop:';
+    font-family: var(--font-cyber);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  .premium-pricing-table td:nth-child(4)::before {
+    content: 'Ghi chú / Cam kết:';
+    font-family: var(--font-cyber);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  /* Value alignment and colors inside cells */
+  .premium-pricing-table td.price-col, 
+  .premium-pricing-table td.note-col {
+    text-align: right !important;
+    font-weight: 600 !important;
+  }
+
+  .premium-pricing-table td.note-col {
+    max-width: 65%;
+    line-height: 1.3;
+  }
+
+  /* Light Theme overrides for Mobile Cards */
+  body.light-theme .premium-pricing-table tr {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03) !important;
+  }
+
+  body.light-theme .premium-pricing-table tr:hover {
+    background: #f8fafc !important;
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08) !important;
+  }
+
+  body.light-theme .premium-pricing-table td {
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+
+  body.light-theme .premium-pricing-table td:nth-child(1) {
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  body.light-theme .premium-pricing-table td:nth-child(2)::before,
+  body.light-theme .premium-pricing-table td:nth-child(3)::before,
+  body.light-theme .premium-pricing-table td:nth-child(4)::before {
+    color: #64748b !important;
+  }
+}
+
+
