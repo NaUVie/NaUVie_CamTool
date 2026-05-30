@@ -1227,11 +1227,352 @@ function setupThemeColorCustomizer() {
     });
   }
 
+  // ========================================================
+  // BỘ ĐIỀU KHIỂN & HIỆU ỨNG HOẠT HỌA NỀN (CANVAS ENGINE)
+  // ========================================================
+  const particlesCanvas = document.getElementById('particles-canvas');
+  const effectSelect = document.getElementById('particles-effect-select');
+  
+  let animationFrameId = null;
+  let particlesArray = [];
+  let canvasCtx = null;
+
+  if (particlesCanvas) {
+    canvasCtx = particlesCanvas.getContext('2d');
+  }
+
+  // Khởi tạo kích thước canvas
+  function resizeCanvas() {
+    if (!particlesCanvas) return;
+    particlesCanvas.width = window.innerWidth;
+    particlesCanvas.height = window.innerHeight;
+  }
+  
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // Class định nghĩa các loại Hạt/Hiệu ứng hoạt họa
+  class Particle {
+    constructor(effectType) {
+      this.reset(effectType, true);
+    }
+
+    reset(effectType, isInit = false) {
+      if (!particlesCanvas) return;
+      this.effectType = effectType;
+      
+      const width = particlesCanvas.width;
+      const height = particlesCanvas.height;
+
+      // Đặt toạ độ xuất phát tùy thuộc hiệu ứng
+      if (effectType === 'GLOW') {
+        // Hạt sáng bay từ dưới lên
+        this.x = Math.random() * width;
+        this.y = isInit ? Math.random() * height : height + 10;
+        this.size = Math.random() * 4 + 2;
+        this.speedY = -(Math.random() * 0.8 + 0.3); // Bay lên trên
+        this.speedX = Math.random() * 0.4 - 0.2;
+        this.opacity = Math.random() * 0.45 + 0.2;
+        this.swaySpeed = Math.random() * 0.02 + 0.01;
+        this.swayAngle = Math.random() * Math.PI * 2;
+        this.swayRadius = Math.random() * 0.8 + 0.2;
+      } else if (effectType === 'SAKURA') {
+        // Mưa anh đào rơi chéo từ trên xuống dưới trái
+        this.x = Math.random() * (width + 100) - 50;
+        this.y = isInit ? Math.random() * height : -20;
+        this.size = Math.random() * 5 + 4;
+        this.speedY = Math.random() * 0.8 + 0.5;
+        this.speedX = -(Math.random() * 0.5 + 0.2); // Bay lệch trái
+        this.opacity = Math.random() * 0.5 + 0.3;
+        this.spin = Math.random() * 0.02 - 0.01;
+        this.angle = Math.random() * Math.PI * 2;
+        this.swaySpeed = Math.random() * 0.02 + 0.01;
+        this.swayAngle = Math.random() * Math.PI * 2;
+        this.swayRadius = Math.random() * 1.5 + 0.5;
+      } else if (effectType === 'SNOW') {
+        // Bông tuyết rơi thẳng nhẹ nhàng
+        this.x = Math.random() * width;
+        this.y = isInit ? Math.random() * height : -10;
+        this.size = Math.random() * 3 + 1.5;
+        this.speedY = Math.random() * 0.7 + 0.3;
+        this.speedX = Math.random() * 0.2 - 0.1;
+        this.opacity = Math.random() * 0.6 + 0.2;
+        this.swaySpeed = Math.random() * 0.015 + 0.005;
+        this.swayAngle = Math.random() * Math.PI * 2;
+        this.swayRadius = Math.random() * 0.8 + 0.2;
+      } else if (effectType === 'MATRIX') {
+        // Ma trận ký tự rơi thẳng đứng
+        this.x = Math.random() * width;
+        // Chia hàng dọc 14px để thẳng hàng
+        this.x = Math.floor(this.x / 14) * 14;
+        this.y = isInit ? Math.random() * height : -20;
+        this.size = Math.random() * 4 + 10; // Kích cỡ font chữ (10px-14px)
+        this.speedY = Math.random() * 2 + 1.5; // Rơi rất nhanh
+        this.speedX = 0;
+        this.opacity = Math.random() * 0.75 + 0.25;
+        
+        // Ký tự ngẫu nhiên
+        const chars = '01abcdefghijklmnopqrstuvwxyz日ハミヒーウシ';
+        this.char = chars.charAt(Math.floor(Math.random() * chars.length));
+        this.frameCounter = 0;
+      } else if (effectType === 'STARS') {
+        // Sao băng vạch chéo cực nhanh từ trên phải xuống dưới trái
+        this.x = Math.random() * (width + 200) - 100;
+        this.y = isInit ? Math.random() * height : -50;
+        this.size = Math.random() * 40 + 30; // Độ dài vệt
+        this.speedY = Math.random() * 3 + 4; // Rơi cực nhanh
+        this.speedX = -(this.speedY * 1.2); // Chéo nghiêng góc
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.lineWidth = Math.random() * 1.5 + 0.5;
+      }
+    }
+
+    update(effectType) {
+      if (!particlesCanvas) return;
+      this.effectType = effectType;
+
+      if (effectType === 'GLOW') {
+        this.y += this.speedY;
+        this.swayAngle += this.swaySpeed;
+        this.x += this.speedX + Math.sin(this.swayAngle) * this.swayRadius;
+        
+        // Reset khi bay hết màn hình trên
+        if (this.y < -10) this.reset(effectType, false);
+      } else if (effectType === 'SAKURA') {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.swayAngle += this.swaySpeed;
+        this.x += Math.sin(this.swayAngle) * this.swayRadius;
+        this.angle += this.spin;
+
+        if (this.y > particlesCanvas.height + 10 || this.x < -60 || this.x > particlesCanvas.width + 60) {
+          this.reset(effectType, false);
+        }
+      } else if (effectType === 'SNOW') {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.swayAngle += this.swaySpeed;
+        this.x += Math.sin(this.swayAngle) * this.swayRadius;
+
+        if (this.y > particlesCanvas.height + 10 || this.x < -10 || this.x > particlesCanvas.width + 10) {
+          this.reset(effectType, false);
+        }
+      } else if (effectType === 'MATRIX') {
+        this.y += this.speedY;
+        this.frameCounter++;
+        // Thay đổi ký tự ngẫu nhiên theo khung hình
+        if (this.frameCounter % 15 === 0) {
+          const chars = '01abcdefghijklmnopqrstuvwxyz日ハミヒーウシ';
+          this.char = chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        if (this.y > particlesCanvas.height + 20) {
+          this.reset(effectType, false);
+        }
+      } else if (effectType === 'STARS') {
+        this.y += this.speedY;
+        this.x += this.speedX;
+
+        if (this.y > particlesCanvas.height + 50 || this.x < -100) {
+          this.reset(effectType, false);
+        }
+      }
+    }
+
+    draw(activeColor) {
+      if (!canvasCtx) return;
+      canvasCtx.save();
+
+      if (this.effectType === 'GLOW') {
+        // Hạt sáng neon huyền ảo
+        canvasCtx.translate(this.x, this.y);
+        canvasCtx.globalAlpha = this.opacity;
+        const gradient = canvasCtx.createRadialGradient(0, 0, 0, 0, 0, this.size);
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(0.3, activeColor);
+        gradient.addColorStop(1, 'transparent');
+        canvasCtx.fillStyle = gradient;
+        canvasCtx.beginPath();
+        canvasCtx.arc(0, 0, this.size, 0, Math.PI * 2);
+        canvasCtx.fill();
+      } else if (this.effectType === 'SAKURA') {
+        // Cánh hoa đào wibu
+        canvasCtx.translate(this.x, this.y);
+        canvasCtx.rotate(this.angle);
+        canvasCtx.globalAlpha = this.opacity;
+        canvasCtx.fillStyle = '#ff75a0';
+        canvasCtx.beginPath();
+        canvasCtx.ellipse(0, 0, this.size, this.size * 1.4, 0, 0, Math.PI * 2);
+        canvasCtx.fill();
+        
+        canvasCtx.strokeStyle = '#ffa3c4';
+        canvasCtx.lineWidth = 1;
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, this.size * 1.4);
+        canvasCtx.lineTo(0, -this.size * 0.4);
+        canvasCtx.stroke();
+      } else if (this.effectType === 'SNOW') {
+        // Bông tuyết trắng ngần
+        canvasCtx.translate(this.x, this.y);
+        canvasCtx.globalAlpha = this.opacity;
+        const gradient = canvasCtx.createRadialGradient(0, 0, 0, 0, 0, this.size);
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
+        gradient.addColorStop(1, 'transparent');
+        canvasCtx.fillStyle = gradient;
+        canvasCtx.beginPath();
+        canvasCtx.arc(0, 0, this.size, 0, Math.PI * 2);
+        canvasCtx.fill();
+      } else if (this.effectType === 'MATRIX') {
+        // Code rơi ma trận cyberpunk
+        canvasCtx.translate(this.x, this.y);
+        canvasCtx.globalAlpha = this.opacity;
+        canvasCtx.font = `${this.size}px monospace`;
+        canvasCtx.fillStyle = activeColor;
+        
+        canvasCtx.shadowColor = activeColor;
+        canvasCtx.shadowBlur = 8;
+        canvasCtx.fillText(this.char, 0, 0);
+      } else if (this.effectType === 'STARS') {
+        // Sao băng vút chéo vũ trụ
+        canvasCtx.globalAlpha = this.opacity;
+        canvasCtx.strokeStyle = activeColor;
+        canvasCtx.lineWidth = this.lineWidth;
+        
+        canvasCtx.shadowColor = activeColor;
+        canvasCtx.shadowBlur = 6;
+        
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(this.x, this.y);
+        canvasCtx.lineTo(this.x - this.size, this.y - this.size * 0.8);
+        canvasCtx.stroke();
+      }
+
+      canvasCtx.restore();
+    }
+  }
+
+  // Khởi tạo mảng các hạt bay
+  function initParticles(effectType) {
+    particlesArray = [];
+    if (effectType === 'NONE') return;
+    
+    let count = 45;
+    if (effectType === 'SNOW') count = 75; // Snow density
+    if (effectType === 'MATRIX') count = 50; // Matrix code lines
+    const densityAdjuster = Math.min(count, Math.floor((window.innerWidth * window.innerHeight) / 25000));
+    const finalCount = effectType === 'STARS' ? 6 : densityAdjuster;
+
+    for (let i = 0; i < finalCount; i++) {
+      particlesArray.push(new Particle(effectType));
+    }
+  }
+
+  // --- Xử lý LỚP HIỂN THỊ HIỆU ỨNG (FRONT vs BACK) ---
+  const layerSelect = document.getElementById('particles-layer-select');
+
+  function applyParticlesLayer(layer) {
+    if (!particlesCanvas) return;
+    if (layer === 'FRONT') {
+      particlesCanvas.style.zIndex = '999'; // Đè lên trên card
+    } else {
+      particlesCanvas.style.zIndex = '-1'; // Nằm dưới nền
+    }
+    if (layerSelect) {
+      layerSelect.value = layer;
+    }
+  }
+
+  // Khởi động load cấu hình từ cache
+  const savedEffect = localStorage.getItem('nauvie_particles_effect') || 'GLOW';
+  const savedLayer = localStorage.getItem('nauvie_particles_layer') || 'BACK'; // Mặc định dưới nền
+
+  applyParticlesLayer(savedLayer);
+
+  // Animation Loop chạy canvas liên tục
+  function animateParticles() {
+    if (!canvasCtx || !particlesCanvas) return;
+    canvasCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+
+    const selectedEffect = effectSelect ? effectSelect.value : 'GLOW';
+    if (selectedEffect === 'NONE') {
+      animationFrameId = requestAnimationFrame(animateParticles);
+      return;
+    }
+
+    // Lấy màu hiện tại từ CSS variables để đổi màu neon thời gian thực
+    const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-blue').trim() || '#00f0ff';
+
+    particlesArray.forEach(particle => {
+      particle.update(selectedEffect);
+      particle.draw(activeColor);
+    });
+
+    animationFrameId = requestAnimationFrame(animateParticles);
+  }
+
+  // Bật hoặc Tắt Particle Engine
+  function toggleParticles(isEnabled) {
+    if (isEnabled) {
+      if (particlesCanvas) particlesCanvas.style.display = 'block';
+      if (!animationFrameId) {
+        animateParticles();
+      }
+    } else {
+      if (particlesCanvas) {
+        particlesCanvas.style.display = 'none';
+        canvasCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+      }
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    }
+  }
+
+  // Đọc cấu hình từ cache
+  if (effectSelect) {
+    effectSelect.value = savedEffect;
+    
+    if (savedEffect !== 'NONE') {
+      initParticles(savedEffect);
+      toggleParticles(true);
+    } else {
+      toggleParticles(false);
+    }
+
+    // Lắng nghe sự kiện đổi hiệu ứng
+    effectSelect.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      localStorage.setItem('nauvie_particles_effect', selected);
+      
+      if (selected !== 'NONE') {
+        initParticles(selected);
+        toggleParticles(true);
+        showToast('success', `Đã đổi sang: ${effectSelect.options[effectSelect.selectedIndex].text}!`);
+      } else {
+        toggleParticles(false);
+        showToast('success', 'Đã tắt hiệu ứng hạt bay để tối ưu hiệu năng tối đa!');
+      }
+    });
+  }
+
+  if (layerSelect) {
+    layerSelect.addEventListener('change', (e) => {
+      const selectedLayer = e.target.value;
+      applyParticlesLayer(selectedLayer);
+      localStorage.setItem('nauvie_particles_layer', selectedLayer);
+      showToast('success', selectedLayer === 'FRONT' ? 'Hiệu ứng đã được hiển thị ĐÈ LÊN TRÊN card!' : 'Hiệu ứng đã được hiển thị DƯỚI NỀN đằng sau card!');
+    });
+  }
+
   // Reset về mặc định
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       localStorage.removeItem('nauvie_theme_color');
       localStorage.removeItem('nauvie_glass_opacity');
+      localStorage.removeItem('nauvie_particles_effect');
+      localStorage.removeItem('nauvie_particles_layer');
       
       // Xoá các property đã ghi đè trực tiếp
       const root = document.documentElement;
@@ -1246,6 +1587,16 @@ function setupThemeColorCustomizer() {
 
       // Khôi phục lại độ trong suốt mặc định
       applyGlassOpacity(65);
+
+      // Khôi phục lại hiệu ứng hạt bay mặc định (GLOW)
+      if (effectSelect) {
+        effectSelect.value = 'GLOW';
+        initParticles('GLOW');
+        toggleParticles(true);
+      }
+
+      // Khôi phục lại lớp hiển thị mặc định (BACK)
+      applyParticlesLayer('BACK');
       
       // Reset UI trạng thái nút
       presetButtons.forEach(b => b.classList.remove('active'));
@@ -1294,6 +1645,19 @@ function setupThemeColorCustomizer() {
         // Cập nhật lại độ trong suốt của card & panel theo theme mới
         const currentOpacity = localStorage.getItem('nauvie_glass_opacity') || 65;
         applyGlassOpacity(parseInt(currentOpacity, 10));
+
+        // Khôi phục lại trạng thái hạt bay hoạt họa
+        const savedEff = localStorage.getItem('nauvie_particles_effect') || 'GLOW';
+        if (savedEff !== 'NONE') {
+          initParticles(savedEff);
+          toggleParticles(true);
+        } else {
+          toggleParticles(false);
+        }
+
+        // Khôi phục lại cấu hình lớp hiển thị
+        const currentLayer = localStorage.getItem('nauvie_particles_layer') || 'BACK';
+        applyParticlesLayer(currentLayer);
       }, 50); // Chờ theme class được toggle xong
     });
   }

@@ -15,6 +15,8 @@
 </head>
 
 <body class="antialiased">
+  <!-- Dynamic Particles Canvas -->
+  <canvas id="particles-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1;"></canvas>
 
   <!-- Minimalist Top Navigation -->
   <header class="nauvie-navbar">
@@ -287,6 +289,34 @@
               <input type="range" id="glass-opacity-slider" min="10" max="95" value="65" style="flex: 1; accent-color: var(--primary-blue); cursor: pointer; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1);" />
               <span id="glass-opacity-val" style="font-family: monospace; font-size: 11px; font-weight: bold; color: var(--primary-blue); width: 28px; text-align: right;">65%</span>
             </div>
+          </div>
+
+          <!-- Particles Effect Section -->
+          <div class="control-group" style="border-top: 1px solid var(--cyber-border); padding-top: 16px; margin-top: 12px;">
+            <span class="group-title"
+              style="font-size: 10px; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 8px;">HIỆU ỨNG NỀN HOẠT HỌA</span>
+            
+            <select id="particles-effect-select" class="cyber-select"
+              style="width: 100%; padding: 8px 10px; font-size: 12px; border-radius: 6px;">
+              <option value="GLOW">✨ Hạt Neon Lấp Lánh (Tự Đổi Màu)</option>
+              <option value="SAKURA">🌸 Mưa Hoa Anh Đào (Wibu Style)</option>
+              <option value="SNOW">❄️ Bông Tuyết Rơi (Tinh Khiết)</option>
+              <option value="MATRIX">💻 Mã Rơi Ma Trận (Cyberpunk Tech)</option>
+              <option value="STARS">🌠 Sao Băng Vũ Trụ (Huyền Ảo)</option>
+              <option value="NONE">❌ Tắt Hiệu Ứng (Tối Ưu Nhất)</option>
+            </select>
+          </div>
+
+          <!-- Particles Layer Section -->
+          <div class="control-group" style="border-top: 1px solid var(--cyber-border); padding-top: 16px; margin-top: 12px;">
+            <span class="group-title"
+              style="font-size: 10px; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 8px;">LỚP HIỂN THỊ HIỆU ỨNG</span>
+            
+            <select id="particles-layer-select" class="cyber-select"
+              style="width: 100%; padding: 8px 10px; font-size: 12px; border-radius: 6px;">
+              <option value="BACK">👇 Dưới Nền (Đằng Sau Card)</option>
+              <option value="FRONT">☝️ Đè Lên Trên (Trước Card)</option>
+            </select>
           </div>
         </div>
 
