@@ -1370,3 +1370,56 @@ body.light-theme .right-tab-btn.active {
     padding: 10px 14px !important;
   }
 }
+
+/* ========================================================
+   Theme Color Customizer Styles
+   ======================================================== */
+.preset-color-btn {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform var(--speed) ease, box-shadow var(--speed) ease, border-color var(--speed) ease;
+}
+
+.preset-color-btn:hover {
+  transform: scale(1.15) !important;
+}
+
+.preset-color-btn.active {
+  border-color: var(--text-white) !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 12px currentColor !important;
+}
+
+body.light-theme .preset-color-btn.active {
+  border-color: #000000 !important;
+}
+
+.custom-color-picker-wrapper {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: conic-gradient(red, yellow, green, cyan, blue, magenta, red);
+  transition: transform var(--speed) ease, border-color var(--speed) ease, box-shadow var(--speed) ease;
+}
+
+.custom-color-picker-wrapper:hover {
+  transform: scale(1.15) !important;
+}
+
+.custom-color-picker-wrapper.active {
+  border-color: var(--text-white) !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4) !important;
+}
+
+body.light-theme .custom-color-picker-wrapper.active {
+  border-color: #000000 !important;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2) !important;
+}

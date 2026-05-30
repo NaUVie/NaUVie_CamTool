@@ -53,6 +53,7 @@ let viewMode = localStorage.getItem('nauvie_view_mode') || 'GRID';
 // Khởi chạy
 document.addEventListener('DOMContentLoaded', () => {
   setupTheme();
+  setupThemeColorCustomizer();
   setupHopsLimit();
   setupViewMode();
   setupEventListeners();
@@ -966,4 +967,365 @@ function startSilentAudioKeepAlive() {
 ['click', 'touchstart', 'keydown', 'mousedown'].forEach(evt => {
   window.addEventListener(evt, startSilentAudioKeepAlive, { once: true, passive: true });
 });
+
+// ========================================================
+// Theme Color Customizer Implementation
+// ========================================================
+function setupThemeColorCustomizer() {
+  const savedColor = localStorage.getItem('nauvie_theme_color');
+  const presetButtons = document.querySelectorAll('.preset-color-btn');
+  const colorPicker = document.getElementById('custom-theme-color-picker');
+  const colorPickerWrapper = document.querySelector('.custom-color-picker-wrapper');
+  const colorHexText = document.getElementById('current-color-hex');
+  const resetBtn = document.getElementById('reset-theme-color-btn');
+
+  // Hàm áp dụng màu sắc vào các biến CSS
+  function applyThemeColor(hex) {
+    if (!hex) return;
+    
+    const root = document.documentElement;
+    root.style.setProperty('--primary-blue', hex);
+    
+    // Tạo màu hover (sáng/tối hơn một chút) và border
+    // Chuyển hex sang rgb để tạo các giá trị rgba
+    const rgb = hexToRgb(hex);
+    if (rgb) {
+      // Lighten or darken slightly for hover state
+      const isLight = document.body.classList.contains('light-theme');
+      const hoverHex = lightenDarkenColor(hex, isLight ? -20 : 20); 
+      root.style.setProperty('--primary-hover', hoverHex);
+      
+      // Don't override light theme border (which uses clean specular semi-transparent white highlight)
+      if (!isLight) {
+        root.style.setProperty('--cyber-border', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.12)`);
+        root.style.setProperty('--cyber-border-hover', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`);
+        document.body.style.backgroundImage = `radial-gradient(circle at 50% 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.035) 0%, transparent 50%)`;
+      } else {
+        root.style.removeProperty('--cyber-border');
+        root.style.removeProperty('--cyber-border-hover');
+        document.body.style.backgroundImage = `
+          radial-gradient(at 0% 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05) 0px, transparent 50%), 
+          radial-gradient(at 50% 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.06) 0px, transparent 50%),
+          radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.02) 0px, transparent 40%)
+        `;
+      }
+    }
+    
+    if (colorHexText) {
+      colorHexText.textContent = hex.toUpperCase();
+      colorHexText.style.color = hex;
+    }
+  }
+
+  // Khởi động từ cache
+  if (savedColor) {
+    applyThemeColor(savedColor);
+    if (colorPicker) colorPicker.value = savedColor;
+    
+    // Đánh dấu nút active tương ứng
+    let matchedPreset = false;
+    presetButtons.forEach(btn => {
+      if (btn.dataset.color.toLowerCase() === savedColor.toLowerCase()) {
+        btn.classList.add('active');
+        matchedPreset = true;
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    if (!matchedPreset && colorPickerWrapper) {
+      colorPickerWrapper.classList.add('active');
+    }
+  }
+
+  // Sự kiện khi nhấn các preset màu có sẵn
+  presetButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presetButtons.forEach(b => b.classList.remove('active'));
+      if (colorPickerWrapper) colorPickerWrapper.classList.remove('active');
+      
+      btn.classList.add('active');
+      const color = btn.dataset.color;
+      
+      applyThemeColor(color);
+      localStorage.setItem('nauvie_theme_color', color);
+      if (colorPicker) colorPicker.value = color;
+      
+      showToast('success', `Đã đổi màu chủ đề thành ${btn.title}!`);
+    });
+  });
+
+  // Sự kiện khi thay đổi bảng màu Picker
+  if (colorPicker) {
+    colorPicker.addEventListener('input', (e) => {
+      const color = e.target.value;
+      presetButtons.forEach(b => b.classList.remove('active'));
+      if (colorPickerWrapper) colorPickerWrapper.classList.add('active');
+      
+      applyThemeColor(color);
+      localStorage.setItem('nauvie_theme_color', color);
+    });
+
+    colorPicker.addEventListener('change', (e) => {
+      showToast('success', `Đã lưu màu tự chọn: ${e.target.value.toUpperCase()}!`);
+    });
+  }
+
+  // --- Xử lý ẢNH NỀN TÙY CHỌN (LƯU CỤC BỘ TRONG TRÌNH DUYỆT) ---
+  const bgUploader = document.getElementById('custom-bg-uploader');
+  const removeBgBtn = document.getElementById('remove-custom-bg-btn');
+
+  // Hàm hiển thị hình nền tùy chọn lên body với lớp phủ mờ bảo toàn độ tương phản
+  function applyCustomBackground(base64Url) {
+    if (!base64Url) {
+      document.body.style.removeProperty('background-image');
+      if (removeBgBtn) removeBgBtn.style.display = 'none';
+      
+      // Khôi phục lại gradient vòng hào quang cyan mặc định nếu là dark theme
+      const currentActiveColor = localStorage.getItem('nauvie_theme_color') || '#00f0ff';
+      applyThemeColor(currentActiveColor);
+      return;
+    }
+
+    const isLight = document.body.classList.contains('light-theme');
+    // Áp dụng lớp phủ tối (hoặc sáng) tinh tế lên trên ảnh nền để giữ độ tương phản cao cho chữ và thẻ!
+    const overlay = isLight 
+      ? 'linear-gradient(rgba(243, 244, 246, 0.88), rgba(243, 244, 246, 0.88))'
+      : 'linear-gradient(rgba(10, 12, 18, 0.88), rgba(10, 12, 18, 0.88))';
+    
+    document.body.style.backgroundImage = `${overlay}, url(${base64Url})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
+    
+    if (removeBgBtn) removeBgBtn.style.display = 'block';
+  }
+
+  // Khởi động load ảnh nền từ cache
+  const savedBg = localStorage.getItem('nauvie_custom_bg');
+  if (savedBg) {
+    applyCustomBackground(savedBg);
+  }
+
+  // Lắng nghe sự kiện Upload ảnh
+  if (bgUploader) {
+    bgUploader.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('error', 'Vui lòng chọn một tệp hình ảnh hợp lệ!');
+        return;
+      }
+
+      showToast('info', 'Đang tối ưu dung lượng ảnh nền...');
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          // Khởi tạo Canvas để resize và nén chất lượng ảnh
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          // Đặt kích thước tối đa là Full HD (1920x1080) để tối ưu dung lượng localStorage
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 1920;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Nén ảnh sang JPEG chất lượng 0.75 (dung lượng sẽ chỉ khoảng 100KB-200KB cực nhẹ!)
+          try {
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+            
+            // Ghi đè lưu trữ vào localStorage
+            localStorage.setItem('nauvie_custom_bg', compressedBase64);
+            
+            // Áp dụng ngay lập tức
+            applyCustomBackground(compressedBase64);
+            
+            showToast('success', 'Đã lưu và áp dụng ảnh nền thành công!');
+          } catch (err) {
+            console.error(err);
+            showToast('error', 'Ảnh quá lớn! Hãy thử chọn ảnh khác nhẹ hơn.');
+          }
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Lắng nghe nút Xóa ảnh nền
+  if (removeBgBtn) {
+    removeBgBtn.addEventListener('click', () => {
+      localStorage.removeItem('nauvie_custom_bg');
+      applyCustomBackground(null);
+      if (bgUploader) bgUploader.value = ''; // Clear file input
+      showToast('success', 'Đã xóa ảnh nền tùy chọn và khôi phục mặc định!');
+    });
+  }
+
+  // --- Xử lý ĐỘ TRONG SUỐT GIAO DIỆN (GLASSMOPHISM) ---
+  const opacitySlider = document.getElementById('glass-opacity-slider');
+  const opacityValText = document.getElementById('glass-opacity-val');
+
+  // Hàm áp dụng độ trong suốt của card & panel
+  function applyGlassOpacity(percentage) {
+    if (!percentage) percentage = 65; // Mặc định 65%
+    const alpha = percentage / 100;
+    const isLight = document.body.classList.contains('light-theme');
+    const root = document.documentElement;
+
+    if (isLight) {
+      // Light theme: Nền trắng frost
+      const panelAlpha = Math.max(0.1, alpha - 0.2); // Panel nhạt hơn
+      root.style.setProperty('--bg-panel', `rgba(255, 255, 255, ${panelAlpha})`);
+      root.style.setProperty('--bg-card', `rgba(255, 255, 255, ${alpha})`);
+    } else {
+      // Dark theme: Nền tối obsidian mờ
+      const cardAlpha = Math.max(0.1, alpha - 0.05); // Card nhạt hơn một chút
+      root.style.setProperty('--bg-panel', `rgba(10, 12, 18, ${alpha})`);
+      root.style.setProperty('--bg-card', `rgba(20, 22, 33, ${cardAlpha})`);
+    }
+
+    if (opacityValText) {
+      opacityValText.textContent = `${percentage}%`;
+    }
+    if (opacitySlider) {
+      opacitySlider.value = percentage;
+    }
+  }
+
+  // Khởi động load độ trong suốt từ cache
+  const savedOpacity = localStorage.getItem('nauvie_glass_opacity');
+  if (savedOpacity) {
+    applyGlassOpacity(parseInt(savedOpacity, 10));
+  } else {
+    applyGlassOpacity(65);
+  }
+
+  // Lắng nghe sự kiện di chuyển slider
+  if (opacitySlider) {
+    opacitySlider.addEventListener('input', (e) => {
+      const percentage = e.target.value;
+      applyGlassOpacity(percentage);
+      localStorage.setItem('nauvie_glass_opacity', percentage);
+    });
+  }
+
+  // Reset về mặc định
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      localStorage.removeItem('nauvie_theme_color');
+      localStorage.removeItem('nauvie_glass_opacity');
+      
+      // Xoá các property đã ghi đè trực tiếp
+      const root = document.documentElement;
+      root.style.removeProperty('--primary-blue');
+      root.style.removeProperty('--primary-hover');
+      root.style.removeProperty('--cyber-border');
+      root.style.removeProperty('--cyber-border-hover');
+      
+      // Khôi phục lại ảnh nền từ cache nếu có (tránh bị xóa bởi removeProperty)
+      const savedBg = localStorage.getItem('nauvie_custom_bg');
+      applyCustomBackground(savedBg);
+
+      // Khôi phục lại độ trong suốt mặc định
+      applyGlassOpacity(65);
+      
+      // Reset UI trạng thái nút
+      presetButtons.forEach(b => b.classList.remove('active'));
+      if (colorPickerWrapper) colorPickerWrapper.classList.remove('active');
+      
+      // Kích hoạt lại nút đầu tiên (Default Cyan)
+      const defaultBtn = document.querySelector('.preset-color-btn[data-color="#00f0ff"]');
+      if (defaultBtn) defaultBtn.classList.add('active');
+      
+      const isLight = document.body.classList.contains('light-theme');
+      const defaultHex = isLight ? '#4f46e5' : '#00f0ff';
+      if (colorHexText) {
+        colorHexText.textContent = defaultHex.toUpperCase();
+        colorHexText.style.color = 'var(--primary-blue)';
+      }
+      if (colorPicker) colorPicker.value = '#00f0ff';
+      
+      showToast('success', 'Đã khôi phục thiết lập giao diện mặc định của hệ thống!');
+    });
+  }
+
+  // Đồng bộ lại màu sắc khi chuyển theme Sáng/Tối
+  const themeToggleBtn = document.getElementById('theme-toggle-btn');
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        const currentActiveColor = localStorage.getItem('nauvie_theme_color');
+        if (currentActiveColor) {
+          applyThemeColor(currentActiveColor);
+        } else {
+          // Nếu dùng mặc định, reset text hiển thị màu
+          const isLight = document.body.classList.contains('light-theme');
+          const defaultHex = isLight ? '#4f46e5' : '#00f0ff';
+          if (colorHexText) {
+            colorHexText.textContent = defaultHex.toUpperCase();
+            colorHexText.style.color = 'var(--primary-blue)';
+          }
+        }
+        
+        // Cập nhật lại lớp phủ mờ của ảnh nền tương ứng theo theme mới
+        const savedBg = localStorage.getItem('nauvie_custom_bg');
+        if (savedBg) {
+          applyCustomBackground(savedBg);
+        }
+
+        // Cập nhật lại độ trong suốt của card & panel theo theme mới
+        const currentOpacity = localStorage.getItem('nauvie_glass_opacity') || 65;
+        applyGlassOpacity(parseInt(currentOpacity, 10));
+      }, 50); // Chờ theme class được toggle xong
+    });
+  }
+}
+
+// Helpers chuyển Hex -> RGB
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+// Helper làm sáng/tối màu hex cực mạnh
+function lightenDarkenColor(col, amt) {
+  let usePound = false;
+  if (col[0] == "#") {
+    col = col.slice(1);
+    usePound = true;
+  }
+  let num = parseInt(col, 16);
+  let r = (num >> 16) + amt;
+  if (r > 255) r = 255;
+  else if (r < 0) r = 0;
+  let b = ((num >> 8) & 0x00FF) + amt;
+  if (b > 255) b = 255;
+  else if (b < 0) b = 0;
+  let g = (num & 0x0000FF) + amt;
+  if (g > 255) g = 255;
+  else if (g < 0) g = 0;
+  return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0');
+}
 
