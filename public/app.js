@@ -67,10 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const isAutoRefreshActiveSaved = localStorage.getItem('nauvie_auto_refresh_active') === 'true';
   const savedTimerValue = localStorage.getItem('nauvie_auto_hop_timer_value') || '60';
   
-  // Thiết lập giá trị select từ trước
-  const timerSelect = document.getElementById('server-hop-timer-select');
-  if (timerSelect) {
-    timerSelect.value = savedTimerValue;
+  // Thiết lập giá trị slider từ trước
+  const timerSlider = document.getElementById('server-hop-timer-slider');
+  const timerValSpan = document.getElementById('auto-hop-timer-val');
+  if (timerSlider) {
+    timerSlider.value = savedTimerValue;
+    if (timerValSpan) {
+      const v = parseInt(savedTimerValue);
+      timerValSpan.textContent = v === 120 ? '2m' : (v >= 60 ? `${Math.floor(v / 60)}m${v % 60 > 0 ? ` ${v % 60}s` : ''}` : `${v}s`);
+    }
   }
   
   if (isAutoHopActiveSaved) {
@@ -673,16 +678,35 @@ function setupEventListeners() {
 
   // Auto Hop Listener
   const autoHopCheck = document.getElementById('server-hop-auto-random');
-  const timerSelect = document.getElementById('server-hop-timer-select');
+  const timerSlider = document.getElementById('server-hop-timer-slider');
+  const timerValSpan = document.getElementById('auto-hop-timer-val');
   const countdownSpan = document.getElementById('auto-hop-countdown-span');
+
+  const formatHopTime = (val) => {
+    const v = parseInt(val);
+    if (v === 120) return '2m';
+    if (v >= 60) {
+      const m = Math.floor(v / 60);
+      const s = v % 60;
+      return s > 0 ? `${m}m ${s}s` : `${m}m`;
+    }
+    return `${v}s`;
+  };
+
+  if (timerSlider && timerValSpan) {
+    // Sync span value when slider inputs
+    timerSlider.addEventListener('input', (e) => {
+      timerValSpan.textContent = formatHopTime(e.target.value);
+    });
+  }
 
   autoHopCheck.addEventListener('change', (e) => {
     isAutoHopChecked = e.target.checked;
     localStorage.setItem('nauvie_is_auto_hop_active', isAutoHopChecked ? 'true' : 'false');
-    localStorage.setItem('nauvie_auto_hop_timer_value', timerSelect.value);
+    localStorage.setItem('nauvie_auto_hop_timer_value', timerSlider.value);
     
     if (isAutoHopChecked) {
-      const selectedSeconds = parseInt(timerSelect.value);
+      const selectedSeconds = parseInt(timerSlider.value);
       autoHopTimer = selectedSeconds;
       countdownSpan.textContent = ` (${autoHopTimer}s)`;
       showToast('info', `Tự động nhảy phòng đã kích hoạt. Quá trình bắt đầu sau ${autoHopTimer} giây.`);
@@ -691,13 +715,13 @@ function setupEventListeners() {
     }
   });
 
-  timerSelect.addEventListener('change', () => {
-    localStorage.setItem('nauvie_auto_hop_timer_value', timerSelect.value);
+  timerSlider.addEventListener('change', (e) => {
+    localStorage.setItem('nauvie_auto_hop_timer_value', e.target.value);
     if (isAutoHopChecked) {
-      const selectedSeconds = parseInt(timerSelect.value);
+      const selectedSeconds = parseInt(e.target.value);
       autoHopTimer = selectedSeconds;
       countdownSpan.textContent = ` (${autoHopTimer}s)`;
-      showToast('info', `Đã đổi thời gian tự động nhảy sang ${autoHopTimer} giây.`);
+      showToast('info', `Đã đổi thời gian tự động nhảy sang ${formatHopTime(autoHopTimer)}.`);
     }
   });
 
@@ -789,8 +813,8 @@ function tickAutoHop() {
   }
   
   if (autoHopTimer <= 0) {
-    const timerSelect = document.getElementById('server-hop-timer-select');
-    autoHopTimer = parseInt(timerSelect ? timerSelect.value : '60');
+    const timerSlider = document.getElementById('server-hop-timer-slider');
+    autoHopTimer = parseInt(timerSlider ? timerSlider.value : '60');
     if (countdownSpan) countdownSpan.textContent = ` (${autoHopTimer}s)`;
     performRandomQuickJoin(true);
   }
