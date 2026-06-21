@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NaUVie Hub - Roblox Account Manager Premium (Tích Hợp Chạy Nhiều Acc)</title>
+  <meta name="description"
+    content="Tải Roblox Account Manager miễn phí. Hỗ trợ quản lý hàng loạt tài khoản Roblox, chạy multi-instance nhiều acc cùng lúc, tự đăng nhập bảo mật 100%.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="roblox-manager.css">
+</head>
+
+<body class="antialiased">
+
+  <!-- Minimalist Top Navigation -->
+  <header class="nauvie-navbar">
+    <div class="navbar-container">
+      <a aria-label="NaUVie Hub" class="nauvie-logo" href="index.html">
+        <span class="logo-accent">NaUVie</span> <span class="logo-main">HUB</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="nav-links">
+        <a href="index.html" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 19-7-7 7-7"></path>
+            <path d="M19 12H5"></path>
+          </svg>
+          <span>SERVER HOP TOOL</span>
+        </a>
+        <a href="dungeon.html" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="6 2 18 2 18 6 6 6 6 2"></polygon>
+            <rect width="14" height="14" x="5" y="6" rx="2"></rect>
+            <path d="M9 16h6"></path>
+          </svg>
+          <span>BẢNG GIÁ DUNGEON</span>
+        </a>
+        <a href="#" class="nav-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          <span>QUẢN LÝ ACC</span>
+        </a>
+      </nav>
+
+      <!-- Theme Switcher & Status -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle-btn" class="theme-btn-glass" title="Chuyển chế độ Sáng/Tối">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            style="display: none;">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+        </button>
+
+        <div class="indicator-badge carry-status-badge">
+          <span class="green-glow-dot"></span>
+          <span>STABLE VERSION v1.0.0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Centered Main Content Container -->
+  <main class="nauvie-main-dashboard ram-centered-layout">
+
+    <!-- Hero Header section -->
+    <section class="ram-hero-section">
+      <div class="ram-hero-glow"></div>
+      <div class="ram-hero-content">
+        <div class="hero-kicker">// PHẦN MỀM QUẢN LÝ ACC ROBLOX TÍCH HỢP CHẠY ĐỒNG THỜI</div>
+        <h1 class="ram-hero-title">Roblox <span class="purple-glow-text">Account Manager</span></h1>
+        <p class="ram-hero-subtitle">
+          Công cụ tối ưu giúp quản lý hàng loạt tài khoản Roblox. Hỗ trợ tính năng <strong>Multi-Instance chạy song song nhiều acc cùng lúc</strong> không bị giới hạn, tự động lưu trữ cookie, tự động đăng nhập lại cực nhẹ chỉ ~90MB RAM.
+        </p>
+
+        <!-- CTAs -->
+        <div class="ram-hero-buttons">
+          <a href="https://github.com/NaUVie/RobloxManager/releases/download/v1.0.0/Roblox.Account.Manager-1.0.0-win.zip" class="btn-ram-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+            TẢI XUỐNG NGAY (FREE)
+          </a>
+          <a href="#guide" class="btn-ram-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+            HƯỚNG DẪN SỬ DỤNG
+          </a>
+        </div>
+
+        <!-- Premium UI Interactive Mockup -->
+        <div class="ram-ui-mockup">
+          <div class="ram-mockup-header">
+            <div class="ram-mockup-dots">
+              <span class="ram-mockup-dot red"></span>
+              <span class="ram-mockup-dot yellow"></span>
+              <span class="ram-mockup-dot green"></span>
+            </div>
+            <div class="ram-mockup-title">Roblox Account Manager v1.0.0 - NaUVie Hub Dashboard</div>
+            <div style="width: 32px;"></div>
+          </div>
+          <div class="ram-mockup-content">
+            <!-- Acc 1 -->
+            <div class="ram-mockup-row">
+              <div class="ram-mockup-acc-info">
+                <div class="ram-mockup-avatar">👑</div>
+                <div>
+                  <div class="ram-mockup-name">NaUVie_Main</div>
+                  <div style="font-size: 9px; color: var(--text-muted);">Cookie: Valid · PID: 98664161516921</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="ram-mockup-status running">ĐANG CHẠY</span>
+                <div class="ram-mockup-actions">
+                  <button class="ram-mockup-btn">Cấu hình</button>
+                  <button class="ram-mockup-btn active">Mở Game</button>
+                </div>
+              </div>
+            </div>
+            <!-- Acc 2 -->
+            <div class="ram-mockup-row">
+              <div class="ram-mockup-acc-info">
+                <div class="ram-mockup-avatar">⚔️</div>
+                <div>
+                  <div class="ram-mockup-name">NaUVie_Clone01</div>
+                  <div style="font-size: 9px; color: var(--text-muted);">Cookie: Valid · PID: 98664161516921</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="ram-mockup-status running">ĐANG CHẠY</span>
+                <div class="ram-mockup-actions">
+                  <button class="ram-mockup-btn">Cấu hình</button>
+                  <button class="ram-mockup-btn active">Mở Game</button>
+                </div>
+              </div>
+            </div>
+            <!-- Acc 3 -->
+            <div class="ram-mockup-row">
+              <div class="ram-mockup-acc-info">
+                <div class="ram-mockup-avatar">🛡️</div>
+                <div>
+                  <div class="ram-mockup-name">NaUVie_Clone02</div>
+                  <div style="font-size: 9px; color: var(--text-muted);">Cookie: Valid · Slot: 3</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="ram-mockup-status ready">SẴN SÀNG</span>
+                <div class="ram-mockup-actions">
+                  <button class="ram-mockup-btn">Cấu hình</button>
+                  <button class="ram-mockup-btn">Mở Game</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- General Policy / Rules HUD -->
+    <section class="policy-hud-bar" style="margin-bottom: 32px;">
+      <div class="policy-item"><span class="policy-check">✔</span> MULTI-INSTANCE TÍCH HỢP</div>
+      <div class="policy-item"><span class="policy-check">✔</span> TỰ ĐỘNG ĐĂNG NHẬP (COOKIES)</div>
+      <div class="policy-item"><span class="policy-check">✔</span> KHÔNG QUẢNG CÁO / KHÔNG VIRUS</div>
+      <div class="policy-item"><span class="policy-check">✔</span> TIÊU THỤ CỰC ÍT RAM (~90MB)</div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="ram-features-section">
+      <div class="section-title-hud">// TẠI SAO BẠN NÊN DÙNG ROBLOX ACCOUNT MANAGER?</div>
+      
+      <div class="ram-features-grid">
+        <!-- Feature 1 -->
+        <div class="ram-feature-card">
+          <div class="ram-feature-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          </div>
+          <h3 class="ram-feature-title">Chạy Nhiều Acc (Multi-Instance)</h3>
+          <p class="ram-feature-desc">Mở đồng thời không giới hạn số lượng tài khoản Roblox trên cùng 1 chiếc máy tính. Không cần cài đặt phần mềm Multi-Roblox bên thứ ba rườm rà.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="ram-feature-card">
+          <div class="ram-feature-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <h3 class="ram-feature-title">Quản Lý Account Khoa Học</h3>
+          <p class="ram-feature-desc">Lưu trữ và tổ chức danh sách tài khoản theo nhóm. Lưu cookie để đăng nhập cực nhanh chỉ với 1 cú click chuột mà không cần nhập lại mật khẩu hay OTP.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="ram-feature-card">
+          <div class="ram-feature-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          </div>
+          <h3 class="ram-feature-title">Tự Động Kết Nối Lại (Auto Reconnect)</h3>
+          <p class="ram-feature-desc">Tự động phát hiện khi game bị mất kết nối (Disconnect), bị crash hoặc mất mạng, sau đó tự khởi động lại Roblox và đưa acc của bạn trở lại đúng server cũ.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="ram-feature-card">
+          <div class="ram-feature-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
+          <h3 class="ram-feature-title">Tuyệt Đối An Toàn & Bảo Mật</h3>
+          <p class="ram-feature-desc">Phần mềm lưu trữ dữ liệu tài khoản cục bộ dưới dạng mã hóa bảo mật trên chính máy tính của bạn. Cam kết không gửi thông tin tài khoản ra bên ngoài.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guide Section -->
+    <section class="ram-guide-section" id="guide">
+      <div class="section-title-hud">// HƯỚNG DẪN CÀI ĐẶT & SỬ DỤNG CHI TIẾT</div>
+
+      <!-- Network Warning Alert Box -->
+      <div class="boss-announcer alert-pulsing" style="margin-bottom: 24px; background: rgba(255, 59, 48, 0.08); border-color: rgba(255, 59, 48, 0.25);">
+        <div class="announcer-inner" style="align-items: flex-start;">
+          <div class="icon-glow" style="color: var(--danger-red); border-color: rgba(255, 59, 48, 0.25); background: rgba(255, 59, 48, 0.1);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"></path>
+            </svg>
+          </div>
+          <div class="announcer-text">
+            <div class="kicker" style="color: var(--danger-red);">⚠️ LƯU Ý QUAN TRỌNG VỀ ĐƯỜNG TRUYỀN (MẠNG VIỆT NAM)</div>
+            <h3 style="font-size: 13px; color: var(--text-white);">Roblox hiện đang bị chặn bởi hầu hết các nhà mạng Việt Nam (Viettel, FPT, VNPT...)</h3>
+            <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5;">
+              Để tránh các lỗi như: <strong>không tải được avatar, lỗi kết nối khi lấy ticket, hoặc không thể đăng nhập</strong>: <br>
+              👉 Bạn <strong>CẦN BẬT PHẦN MỀM FAKE IP / VPN</strong> (Ví dụ: <em>WARP 1.1.1.1, ProtonVPN, VietVPN...</em>) hoặc đổi DNS trước khi mở ứng dụng và vào game.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="ram-guide-steps">
+        <!-- Step 1 -->
+        <div class="ram-step-item">
+          <div class="ram-step-num">1</div>
+          <div class="ram-step-content">
+            <h4 class="ram-step-title">🛠️ CÀI ĐẶT & KHỞI CHẠY (BẮT BUỘC)</h4>
+            <p class="ram-step-desc" style="margin-bottom: 8px;">
+              Giải nén toàn bộ tệp tin trong file ZIP này vào một thư mục bất kỳ trên máy tính của bạn (Ví dụ: Thư mục trên ổ C:, D:, hoặc Desktop).
+            </p>
+            <p class="ram-step-desc" style="color: var(--warning-amber); font-weight: bold; margin-bottom: 8px;">
+              LƯU Ý: Không chạy trực tiếp file .exe bên trong tệp nén ZIP khi chưa giải nén, vì nó sẽ báo lỗi thiếu file.
+            </p>
+            <p class="ram-step-desc">
+              Nhấp đúp vào tệp tin <code>Roblox Account Manager.exe</code> để mở ứng dụng. <br>
+              <em>(Tùy chọn) Để tiện sử dụng từ màn hình nền, nhấp chuột phải vào file -> Chọn <strong>Send to -> Desktop (create shortcut)</strong> để tạo lối tắt khởi chạy nhanh ngoài màn hình.</em>
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="ram-step-item">
+          <div class="ram-step-num">2</div>
+          <div class="ram-step-content">
+            <h4 class="ram-step-title">🔑 THÊM TÀI KHOẢN (ĐĂNG NHẬP)</h4>
+            <p class="ram-step-desc" style="margin-bottom: 6px;">
+              Nhấp vào nút <strong>"Thêm Tài Khoản"</strong> trên thanh menu bên trái.
+            </p>
+            <p class="ram-step-desc" style="margin-bottom: 6px;">
+              Một cửa sổ đăng nhập Roblox chính thức sẽ hiện ra. Bạn tiến hành nhập Tài khoản / Mật khẩu và mã bảo mật (nếu có) để đăng nhập như bình thường trên trình duyệt.
+            </p>
+            <p class="ram-step-desc" style="color: var(--success-green); font-weight: bold; margin-bottom: 6px;">
+              AN TOÀN TUYỆT ĐỐI: Bạn đăng nhập trực tiếp trên trang chủ chính thức của Roblox. Ứng dụng KHÔNG THỂ xem hoặc lấy cắp mật khẩu của bạn.
+            </p>
+            <p class="ram-step-desc">
+              Sau khi đăng nhập thành công, cửa sổ đăng nhập sẽ tự động đóng lại, tài khoản của bạn sẽ xuất hiện trên danh sách chính kèm hình ảnh Avatar.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="ram-step-item">
+          <div class="ram-step-num">3</div>
+          <div class="ram-step-content">
+            <h4 class="ram-step-title">🎮 MỞ GAME & TREO NHIỀU TÀI KHỎAN (MULTI-INSTANCE)</h4>
+            <p class="ram-step-desc" style="margin-bottom: 6px;">
+              Nhập Place ID của game Roblox bạn muốn vào (Ví dụ: Blox Fruits là <code>2753915549</code>) hoặc sao chép link game dán vào ô <strong>"Place ID hoặc Link Game"</strong> ở bảng bên phải.
+            </p>
+            <p class="ram-step-desc" style="margin-bottom: 8px;">
+              Để treo nhiều tài khoản cùng lúc (Multi-Instance): Tích chọn nút gạt <strong>"Mở nhiều Roblox"</strong> ở góc trên cùng của ứng dụng.
+            </p>
+            <p class="ram-step-desc">
+              <strong>Để vào game:</strong> Nhấp nút <strong>"Vào Acc"</strong> trên thẻ của tài khoản tương ứng. <br>
+              <strong>Để vào game hàng loạt:</strong> Tích chọn các tài khoản mong muốn, sau đó nhấp nút <strong>"Vào game hàng loạt"</strong> ở bảng Launcher.
+            </p>
+          </div>
+        </div>
+
+        <!-- Utilities -->
+        <div class="ram-step-item" style="border-top: 1px solid var(--cyber-border); padding-top: 20px; margin-top: 10px; width: 100%;">
+          <div class="ram-step-num" style="background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.2); color: #c084fc;">★</div>
+          <div class="ram-step-content">
+            <h4 class="ram-step-title" style="color: #c084fc;">🌟 CÁC TÍNH NĂNG TIỆN ÍCH KHÁC</h4>
+            <ul style="padding-left: 16px; font-size: 12.5px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; margin-top: 8px; line-height: 1.5;">
+              <li>
+                <strong style="color: var(--text-white);">Tự Động Kết Nối Lại (Auto-Rejoin):</strong> Bạn có thể bật tính năng này trong phần Cài đặt (nút răng cưa ở góc dưới cùng). Ứng dụng sẽ theo dõi game, nếu acc nào bị mất kết nối (Disconnect) hoặc crash game, ứng dụng sẽ tự động mở lại game cho acc đó sau 45 giây.
+              </li>
+              <li>
+                <strong style="color: var(--text-white);">Giao diện Sáng / Tối (Light/Dark Mode) & Đổi màu:</strong> Tùy chỉnh trực tiếp trong bảng Cài đặt của hệ thống theo ý thích.
+              </li>
+              <li>
+                <strong style="color: var(--text-white);">Thu gọn xuống khay hệ thống (Minimize to Tray):</strong> Khi nhấp nút đóng (X), ứng dụng sẽ chạy ngầm dưới góc Taskbar giúp tiết kiệm dung lượng RAM/GPU tối đa. Để tắt hẳn app, nhấp chuột phải vào icon ứng dụng dưới góc màn hình và chọn "Thoát ứng dụng".
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Section at Bottom -->
+    <section class="ram-download-card">
+      <div class="ram-download-glow"></div>
+      <div class="ram-download-inner">
+        <h2 class="ram-download-title">TẢI ROBLOX ACCOUNT MANAGER MIỄN PHÍ</h2>
+        <p class="ram-download-desc">
+          Tải bản cài đặt chính thức hỗ trợ chạy nhiều acc, không dính quảng cáo, an toàn tuyệt đối cho thiết bị của bạn.
+        </p>
+        
+        <a href="https://github.com/NaUVie/RobloxManager/releases/download/v1.0.0/Roblox.Account.Manager-1.0.0-win.zip" class="btn-ram-primary" style="padding: 16px 40px; font-size: 15px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+          TẢI FILE ZIP CHO WINDOWS
+        </a>
+
+        <!-- Download details telemetry -->
+        <div class="ram-download-details">
+          <div class="ram-download-detail-item">
+            <span>Dung lượng tải:</span>
+            <strong>~ 2.5 MB</strong>
+          </div>
+          <div class="ram-download-detail-item">
+            <span>Dung lượng giải nén:</span>
+            <strong>~ 200 MB</strong>
+          </div>
+          <div class="ram-download-detail-item">
+            <span>Tiêu thụ RAM:</span>
+            <strong>~ 90 MB</strong>
+          </div>
+          <div class="ram-download-detail-item">
+            <span>Hệ điều hành:</span>
+            <strong>Windows 10 / 11</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Minimalist Premium Footer -->
+  <footer class="nauvie-footer" style="margin-top: 40px;">
+    <div class="footer-inner"
+      style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+      <a aria-label="NaUVie Hub Home" class="footer-logo" href="#">
+        <span class="logo-accent">NaUVie</span> <span class="logo-main">HUB</span>
+      </a>
+      <p class="about-blurb" style="text-align: center; margin: 0; max-width: 500px;">Cổng công cụ tối ưu hóa cày game tự động, an toàn và bảo mật cao dành cho game thủ Roblox.</p>
+      <div class="footer-bottom-bar"
+        style="margin-top: 12px; border-top: 1px solid var(--cyber-border); padding-top: 12px; width: 100%; text-align: center;">
+        <span>© 2026 NaUVie HUB · PHÁT TRIỂN & VẬN HÀNH BỞI NaUVie</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="roblox-manager.js"></script>
+</body>
+
+</html>
