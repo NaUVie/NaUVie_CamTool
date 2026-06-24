@@ -523,3 +523,72 @@ body.light-theme .ram-mockup-name {
 body.light-theme .ram-mockup-btn.active {
   color: #fff;
 }
+
+.disabled-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-muted) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+body.light-theme .disabled-btn {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+}
+
+/* Mockup tabs */
+.ram-mockup-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.ram-tab-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-secondary);
+  font-family: var(--font-cyber);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--speed) ease;
+}
+
+.ram-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-white);
+  border-color: var(--cyber-border-hover);
+}
+
+.ram-tab-btn.active {
+  background: linear-gradient(135deg, #00f0ff 0%, #a855f7 100%);
+  color: #030305;
+  border-color: transparent;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+body.light-theme .ram-tab-btn {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+body.light-theme .ram-tab-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #0f172a;
+}
+
+body.light-theme .ram-tab-btn.active {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+}
+
+/* Image preview transition */
+.ram-preview-img {
+  transition: opacity var(--speed) ease;
+}

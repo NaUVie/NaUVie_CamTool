@@ -74,8 +74,8 @@
         </button>
 
         <div class="indicator-badge carry-status-badge">
-          <span class="green-glow-dot"></span>
-          <span>STABLE VERSION v1.3.0</span>
+          <span class="yellow-glow-dot"></span>
+          <span>SẮP RA MẮT (COMING SOON)</span>
         </div>
       </div>
     </div>
@@ -96,79 +96,42 @@
 
         <!-- CTAs -->
         <div class="ram-hero-buttons">
-          <a href="https://github.com/NaUVie/RobloxManager/releases/download/v1.3.0/RobloxAccountManagerSetup.exe" class="btn-ram-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
-            TẢI XUỐNG NGAY (FREE)
-          </a>
-          <a href="#guide" class="btn-ram-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
-            HƯỚNG DẪN SỬ DỤNG
+          <button class="btn-ram-primary disabled-btn" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            PHIÊN BẢN SẮP RA MẮT
+          </button>
+          <a href="#preview" class="btn-ram-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            XEM GIAO DIỆN APP
           </a>
         </div>
 
-        <!-- Premium UI Interactive Mockup -->
-        <div class="ram-ui-mockup">
-          <div class="ram-mockup-header">
-            <div class="ram-mockup-dots">
+        <!-- Premium UI Image Preview with Tabs -->
+        <div class="ram-ui-mockup" id="preview" style="max-width: 900px; margin: 32px auto 0; padding: 0; overflow: hidden; border: 1px solid var(--cyber-border);">
+          <div class="ram-mockup-header" style="padding: 12px 16px; margin: 0; background: rgba(3, 3, 5, 0.8); display: flex; align-items: center; justify-content: space-between;">
+            <div class="ram-mockup-dots" style="flex: 1; display: flex;">
               <span class="ram-mockup-dot red"></span>
               <span class="ram-mockup-dot yellow"></span>
               <span class="ram-mockup-dot green"></span>
             </div>
-            <div class="ram-mockup-title">Roblox Account Manager v1.3.0 - NaUVie Hub Dashboard</div>
-            <div style="width: 32px;"></div>
+            
+            <!-- Tab buttons -->
+            <div class="ram-mockup-tabs">
+              <button class="ram-tab-btn active" data-target="media-home">Trang Chủ</button>
+              <button class="ram-tab-btn" data-target="media-setting1">Cấu Hình Acc</button>
+              <button class="ram-tab-btn" data-target="media-setting2">Cài Đặt App</button>
+              <button class="ram-tab-btn" data-target="media-setupmacro">Thiết Lập Treo</button>
+            </div>
+            
+            <div style="flex: 1; text-align: right; font-family: var(--font-code); font-size: 11px; color: var(--text-muted);">
+              Preview v1.3.0
+            </div>
           </div>
-          <div class="ram-mockup-content">
-            <!-- Acc 1 -->
-            <div class="ram-mockup-row">
-              <div class="ram-mockup-acc-info">
-                <div class="ram-mockup-avatar">👑</div>
-                <div>
-                  <div class="ram-mockup-name">NaUVie_Main</div>
-                  <div style="font-size: 9px; color: var(--text-muted);">Cookie: Valid · PID: 98664161516921</div>
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <span class="ram-mockup-status running">ĐANG CHẠY</span>
-                <div class="ram-mockup-actions">
-                  <button class="ram-mockup-btn">Cấu hình</button>
-                  <button class="ram-mockup-btn active">Mở Game</button>
-                </div>
-              </div>
-            </div>
-            <!-- Acc 2 -->
-            <div class="ram-mockup-row">
-              <div class="ram-mockup-acc-info">
-                <div class="ram-mockup-avatar">⚔️</div>
-                <div>
-                  <div class="ram-mockup-name">NaUVie_Clone01</div>
-                  <div style="font-size: 9px; color: var(--text-muted);">Cookie: Valid · PID: 98664161516921</div>
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <span class="ram-mockup-status running">ĐANG CHẠY</span>
-                <div class="ram-mockup-actions">
-                  <button class="ram-mockup-btn">Cấu hình</button>
-                  <button class="ram-mockup-btn active">Mở Game</button>
-                </div>
-              </div>
-            </div>
-            <!-- Acc 3 -->
-            <div class="ram-mockup-row">
-              <div class="ram-mockup-acc-info">
-                <div class="ram-mockup-avatar">🛡️</div>
-                <div>
-                  <div class="ram-mockup-name">NaUVie_Clone02</div>
-                  <div style="font-size: 9px; color: var(--text-muted);">Cookie: Valid · Slot: 3</div>
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <span class="ram-mockup-status ready">SẴN SÀNG</span>
-                <div class="ram-mockup-actions">
-                  <button class="ram-mockup-btn">Cấu hình</button>
-                  <button class="ram-mockup-btn">Mở Game</button>
-                </div>
-              </div>
-            </div>
+          <div class="ram-mockup-image-container" style="line-height: 0; background: #000; position: relative;">
+            <img id="media-home" class="ram-preview-img" src="Media/home.png" alt="Roblox Account Manager Dashboard" style="width: 100%; height: auto; display: block;">
+            <img id="media-setting1" class="ram-preview-img" src="Media/setting1.png" alt="Account Configuration" style="width: 100%; height: auto; display: none;">
+            <img id="media-setting2" class="ram-preview-img" src="Media/setting2.png" alt="Application Settings" style="width: 100%; height: auto; display: none;">
+            <img id="media-setupmacro" class="ram-preview-img" src="Media/setupmacro.png" alt="Setup Macro" style="width: 100%; height: auto; display: none;">
           </div>
         </div>
       </div>
@@ -176,9 +139,9 @@
 
     <!-- General Policy / Rules HUD -->
     <section class="policy-hud-bar" style="margin-bottom: 32px;">
+      <div class="policy-item"><span class="policy-check">✔</span> PHIÊN BẢN SẮP RA MẮT</div>
       <div class="policy-item"><span class="policy-check">✔</span> MULTI-INSTANCE TÍCH HỢP</div>
       <div class="policy-item"><span class="policy-check">✔</span> TỰ ĐỘNG ĐĂNG NHẬP (COOKIES)</div>
-      <div class="policy-item"><span class="policy-check">✔</span> KHÔNG QUẢNG CÁO / KHÔNG VIRUS</div>
       <div class="policy-item"><span class="policy-check">✔</span> TIÊU THỤ CỰC ÍT RAM (~90MB)</div>
     </section>
 
@@ -227,7 +190,7 @@
 
     <!-- Guide Section -->
     <section class="ram-guide-section" id="guide">
-      <div class="section-title-hud">// HƯỚNG DẪN CÀI ĐẶT & SỬ DỤNG CHI TIẾT</div>
+      <div class="section-title-hud">// HƯỚNG DẪN CÀI ĐẶT & SỬ DỤNG DỰ KIẾN</div>
 
       <!-- Network Warning Alert Box -->
       <div class="boss-announcer alert-pulsing" style="margin-bottom: 24px; background: rgba(255, 59, 48, 0.08); border-color: rgba(255, 59, 48, 0.25);">
@@ -326,36 +289,36 @@
       </div>
     </section>
 
-    <!-- Download Section at Bottom -->
+    <!-- Coming Soon Section at Bottom -->
     <section class="ram-download-card">
       <div class="ram-download-glow"></div>
       <div class="ram-download-inner">
-        <h2 class="ram-download-title">TẢI ROBLOX ACCOUNT MANAGER MIỄN PHÍ</h2>
+        <h2 class="ram-download-title">ROBLOX ACCOUNT MANAGER - SẮP RA MẮT</h2>
         <p class="ram-download-desc">
-          Tải bản cài đặt chính thức hỗ trợ chạy nhiều acc, không dính quảng cáo, an toàn tuyệt đối cho thiết bị của bạn.
+          Phần mềm hiện đang được đội ngũ phát triển hoàn thiện những khâu cuối cùng. Hãy quay lại sau để tải bản cài đặt chính thức an toàn và bảo mật nhất.
         </p>
         
-        <a href="https://github.com/NaUVie/RobloxManager/releases/download/v1.3.0/RobloxAccountManagerSetup.exe" class="btn-ram-primary" style="padding: 16px 40px; font-size: 15px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
-          TẢI FILE SETUP CHO WINDOWS
-        </a>
+        <button class="btn-ram-primary disabled-btn" disabled style="padding: 16px 40px; font-size: 15px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          PHIÊN BẢN ĐANG ĐƯỢC PHÁT TRIỂN
+        </button>
 
-        <!-- Download details telemetry -->
+        <!-- Technical specs telemetry -->
         <div class="ram-download-details">
           <div class="ram-download-detail-item">
-            <span>Dung lượng tải:</span>
-            <strong>~ 2.5 MB</strong>
-          </div>
-          <div class="ram-download-detail-item">
-            <span>Dung lượng giải nén:</span>
-            <strong>~ 200 MB</strong>
+            <span>Dung lượng dự kiến:</span>
+            <strong>~ 200 MB (Giải nén)</strong>
           </div>
           <div class="ram-download-detail-item">
             <span>Tiêu thụ RAM:</span>
             <strong>~ 90 MB</strong>
           </div>
           <div class="ram-download-detail-item">
-            <span>Hệ điều hành:</span>
+            <span>Trạng thái:</span>
+            <strong style="color: var(--warning-amber);">Under Development</strong>
+          </div>
+          <div class="ram-download-detail-item">
+            <span>Hệ điều hành hỗ trợ:</span>
             <strong>Windows 10 / 11</strong>
           </div>
         </div>

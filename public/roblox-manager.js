@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   setupTheme();
+  setupTabs();
 });
 
 // Setup dual light/dark theme synced with localStorage
@@ -35,5 +36,31 @@ function setupTheme() {
       if (sunIco) sunIco.style.display = 'block';
       if (moonIco) moonIco.style.display = 'none';
     }
+  });
+}
+
+// Setup interactive tabs for image preview gallery
+function setupTabs() {
+  const tabs = document.querySelectorAll('.ram-tab-btn');
+  const images = document.querySelectorAll('.ram-preview-img');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs
+      tabs.forEach(t => t.classList.remove('active'));
+      // Add active class to clicked tab
+      tab.classList.add('active');
+      
+      const targetId = tab.getAttribute('data-target');
+      
+      // Toggle display of preview images
+      images.forEach(img => {
+        if (img.id === targetId) {
+          img.style.display = 'block';
+        } else {
+          img.style.display = 'none';
+        }
+      });
+    });
   });
 }
