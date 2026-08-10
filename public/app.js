@@ -23,6 +23,10 @@ let autoHopInterval = null;
 let autoHopTimer = 60; 
 let isAutoHopChecked = false;
 
+// Auto Hop Boss State
+let isBossHopModeActive = false;
+let activeBossHopWindow = false;
+
 // Bảng xếp hạng Mock
 let leaderboardData = {
   daily: [
@@ -95,6 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoRefreshCheck = document.getElementById('server-hop-auto-refresh');
     if (autoRefreshCheck) autoRefreshCheck.checked = true;
   }
+
+  // Khôi phục Tự động Hop khi đến giờ Boss
+  isBossHopModeActive = localStorage.getItem('nauvie_boss_hop_mode_active') === 'true';
+  activeBossHopWindow = localStorage.getItem('nauvie_boss_hop_window_active') === 'true';
+  const bossHopToggle = document.getElementById('boss-auto-hop-toggle');
+  if (bossHopToggle) bossHopToggle.checked = isBossHopModeActive;
 
   // Khởi chạy Roblox ngay lập tức nếu có tác vụ Auto Hop đang chờ (Bypass user gesture của Chrome cực kỳ vi diệu)
   const pendingAutoHopJobId = localStorage.getItem('nauvie_pending_auto_hop');
@@ -751,6 +761,23 @@ function setupEventListeners() {
       paneGuide.style.display = 'block';
     });
   }
+
+  // Event listener cho Tự động Hop khi đến giờ Boss
+  const bossHopToggle = document.getElementById('boss-auto-hop-toggle');
+  if (bossHopToggle) {
+    bossHopToggle.addEventListener('change', (e) => {
+      isBossHopModeActive = e.target.checked;
+      localStorage.setItem('nauvie_boss_hop_mode_active', isBossHopModeActive);
+      if (isBossHopModeActive) {
+        showToast('success', '⚡ Đã bật Tự động Hop khi đến giờ Boss!');
+        activeBossHopWindow = false;
+      } else {
+        showToast('info', 'Đã tắt Tự động Hop giờ Boss.');
+        activeBossHopWindow = false;
+      }
+      tickBossAutoHop();
+    });
+  }
 }
 
 // Logic Thuật toán Hợp Phòng Nhanh
@@ -858,6 +885,82 @@ function updateBossTimer() {
   }
   
   updateBossScheduleFeed(now);
+  tickBossAutoHop();
+}
+
+// Logic Tự Động Hop Khung Giờ Boss (5 phút đầu mỗi mốc 15p: :00, :15, :30, :45)
+function tickBossAutoHop() {
+  const badge = document.getElementById('boss-hop-live-badge');
+  const textSpan = document.getElementById('boss-hop-live-text');
+
+  if (!isBossHopModeActive) {
+    if (badge) badge.style.display = 'none';
+    return;
+  }
+
+  const now = new Date();
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+  const isIn5MinWindow = (m % 15) < 5;
+
+  if (isIn5MinWindow) {
+    if (!activeBossHopWindow) {
+      activeBossHopWindow = true;
+      localStorage.setItem('nauvie_boss_hop_window_active', 'true');
+
+      isAutoHopChecked = true;
+      const autoHopCheck = document.getElementById('server-hop-auto-random');
+      if (autoHopCheck) autoHopCheck.checked = true;
+      localStorage.setItem('nauvie_is_auto_hop_active', 'true');
+
+      const timerSlider = document.getElementById('server-hop-timer-slider');
+      autoHopTimer = parseInt(timerSlider ? timerSlider.value : '60');
+      const countdownSpan = document.getElementById('auto-hop-countdown-span');
+      if (countdownSpan) countdownSpan.textContent = ` (${autoHopTimer}s)`;
+
+      showToast('success', '⚡ ĐÃ ĐẾN KHUNG 5 PHÚT HOP SĂN BOSS! Tự động Hop đã BẬT.');
+    } else {
+      if (!isAutoHopChecked) {
+        isAutoHopChecked = true;
+        const autoHopCheck = document.getElementById('server-hop-auto-random');
+        if (autoHopCheck) autoHopCheck.checked = true;
+      }
+    }
+
+    const endMin = m - (m % 15) + 5;
+    const minsLeft = endMin - m - 1;
+    const secsLeft = 60 - s;
+
+    if (badge && textSpan) {
+      badge.style.display = 'block';
+      textSpan.textContent = `🔴 Đang Hop đợt Boss (còn ${minsLeft}m ${secsLeft}s)`;
+    }
+  } else {
+    if (activeBossHopWindow) {
+      activeBossHopWindow = false;
+      localStorage.removeItem('nauvie_boss_hop_window_active');
+
+      isAutoHopChecked = false;
+      const autoHopCheck = document.getElementById('server-hop-auto-random');
+      if (autoHopCheck) autoHopCheck.checked = false;
+      localStorage.removeItem('nauvie_is_auto_hop_active');
+
+      const countdownSpan = document.getElementById('auto-hop-countdown-span');
+      if (countdownSpan) countdownSpan.textContent = '';
+
+      showToast('info', '⏰ Đã hết khung 5p Boss Spawn! Tự động Hop đã TẮT.');
+    }
+
+    const nextTargetMin = (Math.floor(m / 15) + 1) * 15;
+    const minsLeft = nextTargetMin - m - 1;
+    const secsLeft = 60 - s;
+    const nextMinDisplay = nextTargetMin === 60 ? '00' : String(nextTargetMin).padStart(2, '0');
+
+    if (badge && textSpan) {
+      badge.style.display = 'block';
+      textSpan.textContent = `⏳ Chờ đợt Boss tiếp theo lúc :${nextMinDisplay} (sau ${minsLeft}m ${secsLeft}s)`;
+    }
+  }
 }
 
 // Cập nhật lịch báo trước Boss

@@ -201,6 +201,25 @@
                 <span style="font-size: 9px; color: var(--text-muted); font-family: monospace; width: 18px; text-align: right;">2m</span>
               </div>
             </div>
+
+            <!-- Auto Hop khi đến giờ Boss -->
+            <div id="boss-auto-hop-container" style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--cyber-border); display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 10px; font-weight: 800; color: var(--warning-amber); display: flex; align-items: center; gap: 4px;">
+                  ⚡ AUTOHOP KHI ĐẾN GIỜ BOSS
+                </span>
+                <label for="boss-auto-hop-toggle" class="auto-hop-lbl" style="font-size: 11px;">
+                  <input id="boss-auto-hop-toggle" type="checkbox" class="cyber-checkbox">
+                  <span style="color: var(--warning-amber); font-weight: bold;">BẬT</span>
+                </label>
+              </div>
+              <div style="font-size: 9px; color: var(--text-muted); line-height: 1.3;">
+                Tự động BẬT Hop 5 phút khi đến khung giờ Boss Spawn (mỗi 15 phút). Hết đợt Boss tự động TẮT.
+              </div>
+              <div id="boss-hop-live-badge" style="display: none; background: rgba(255, 170, 0, 0.08); border: 1px solid rgba(255, 170, 0, 0.3); border-radius: 4px; padding: 4px 8px; font-size: 10px; color: var(--warning-amber); font-family: monospace;">
+                <span id="boss-hop-live-text">Chờ đợt Boss Spawn...</span>
+              </div>
+            </div>
           </div>
 
           <!-- Stats list inside control sidebar -->
