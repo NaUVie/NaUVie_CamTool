@@ -2,7 +2,7 @@
 // Serverless = mỗi request là một lần chạy riêng, KHÔNG có background polling.
 // Dùng native fetch (Node 18+ trên Vercel) thay vì node-fetch.
 
-const PLACE_ID = '98664161516921'; // Catch a Monster place ID
+const DEFAULT_PLACE_ID = '98664161516921'; // Default: Catch a Monster
 
 module.exports = async function handler(req, res) {
   // Chỉ cho phép GET
@@ -10,8 +10,10 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const placeId = req.query.placeId || req.query.place_id || DEFAULT_PLACE_ID;
+
   try {
-    const url = `https://games.roblox.com/v1/games/${PLACE_ID}/servers/Public?limit=100&sortOrder=Asc`;
+    const url = `https://games.roblox.com/v1/games/${placeId}/servers/Public?limit=100&sortOrder=Asc`;
 
     const response = await fetch(url, {
       headers: {
@@ -51,3 +53,4 @@ module.exports = async function handler(req, res) {
     });
   }
 };
+

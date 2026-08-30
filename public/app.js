@@ -2,7 +2,15 @@
 let allServers = [];
 let filteredServers = [];
 let visibleServersCount = 12;
-const PLACE_ID = '98664161516921';
+
+const CONFIG = window.GAME_CONFIG || {
+  placeId: '98664161516921',
+  name: 'Catch a Monster',
+  code: 'CAM',
+  hasAutoHop: true,
+  hasBossTimer: true
+};
+const PLACE_ID = CONFIG.placeId;
 
 // Lọc & Sắp xếp mặc định
 let playerFilter = 'ALL'; 
@@ -62,9 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
   setupViewMode();
   setupEventListeners();
   loadServers();
-  startBossTimer();
+  if (CONFIG.hasBossTimer) {
+    startBossTimer();
+  }
   updateUTCClock();
   setupLeaderboard();
+
   
   // Khởi tạo trạng thái Auto Hop/Refresh lưu từ trước khi reload
   const isAutoHopActiveSaved = localStorage.getItem('nauvie_is_auto_hop_active') === 'true';
@@ -295,7 +306,7 @@ async function loadServers() {
   const statusText = statusBadge ? statusBadge.querySelector('span:last-child') : null;
   
   try {
-    const response = await fetch('/api/servers');
+    const response = await fetch(`/api/servers?placeId=${PLACE_ID}`);
     if (!response.ok) {
       throw new Error('Không thể lấy dữ liệu từ Roblox proxy engine.');
     }
@@ -631,11 +642,14 @@ function setupEventListeners() {
       processAndRenderServers();
     });
   });
-  
+
   // Nút Refresh tay
-  document.getElementById('manual-refresh-btn').addEventListener('click', () => {
-    loadServers();
-  });
+  const manualRefreshBtn = document.getElementById('manual-refresh-btn');
+  if (manualRefreshBtn) {
+    manualRefreshBtn.addEventListener('click', () => {
+      loadServers();
+    });
+  }
 
   // Chọn sắp xếp server
   const sortSelect = document.getElementById('server-sort-select');
@@ -646,45 +660,53 @@ function setupEventListeners() {
   }
   
   // Nút xem thêm phòng
-  document.getElementById('show-more-btn').addEventListener('click', () => {
-    visibleServersCount += 12;
-    renderGrid();
-  });
+  const showMoreBtn = document.getElementById('show-more-btn');
+  if (showMoreBtn) {
+    showMoreBtn.addEventListener('click', () => {
+      visibleServersCount += 12;
+      renderGrid();
+    });
+  }
   
   // FAQ accordion toggle
   const faqToggle = document.getElementById('faq-toggle');
   const faqContent = document.getElementById('faq-content');
   const faqChevron = document.querySelector('.faq-chevron');
   
-  faqToggle.addEventListener('click', () => {
-    const isHidden = faqContent.classList.toggle('hidden');
-    faqChevron.classList.toggle('active', !isHidden);
-  });
+  if (faqToggle && faqContent) {
+    faqToggle.addEventListener('click', () => {
+      const isHidden = faqContent.classList.toggle('hidden');
+      if (faqChevron) faqChevron.classList.toggle('active', !isHidden);
+    });
+  }
   
   // Auto Refresh Listener
   const autoRefreshCheck = document.getElementById('server-hop-auto-refresh');
-  autoRefreshCheck.addEventListener('change', (e) => {
-    isAutoRefreshChecked = e.target.checked;
-    autoRefreshTimer = 30;
-    document.getElementById('auto-refresh-timer').textContent = `30s`;
-    localStorage.setItem('nauvie_auto_refresh_active', isAutoRefreshChecked ? 'true' : 'false');
-    
-    const pollingStatus = document.getElementById('polling-status-desc');
-    if (pollingStatus) {
-      if (isAutoRefreshChecked) {
-        pollingStatus.textContent = 'Auto Polling (30s)';
-        pollingStatus.className = 'value-text text-green';
-        showToast('info', 'Đã kích hoạt tự động quét danh sách sau mỗi 30 giây.');
+  if (autoRefreshCheck) {
+    autoRefreshCheck.addEventListener('change', (e) => {
+      isAutoRefreshChecked = e.target.checked;
+      autoRefreshTimer = 30;
+      const timerSpan = document.getElementById('auto-refresh-timer');
+      if (timerSpan) timerSpan.textContent = `30s`;
+      localStorage.setItem('nauvie_auto_refresh_active', isAutoRefreshChecked ? 'true' : 'false');
+      
+      const pollingStatus = document.getElementById('polling-status-desc');
+      if (pollingStatus) {
+        if (isAutoRefreshChecked) {
+          pollingStatus.textContent = 'Auto Polling (30s)';
+          pollingStatus.className = 'value-text text-green';
+          showToast('info', 'Đã kích hoạt tự động quét danh sách sau mỗi 30 giây.');
+        } else {
+          pollingStatus.textContent = 'Quét thủ công';
+          pollingStatus.className = 'value-text';
+        }
       } else {
-        pollingStatus.textContent = 'Quét thủ công';
-        pollingStatus.className = 'value-text';
+        if (isAutoRefreshChecked) {
+          showToast('info', 'Đã kích hoạt tự động quét danh sách sau mỗi 30 giây.');
+        }
       }
-    } else {
-      if (isAutoRefreshChecked) {
-        showToast('info', 'Đã kích hoạt tự động quét danh sách sau mỗi 30 giây.');
-      }
-    }
-  });
+    });
+  }
 
   // Auto Hop Listener
   const autoHopCheck = document.getElementById('server-hop-auto-random');
@@ -710,35 +732,42 @@ function setupEventListeners() {
     });
   }
 
-  autoHopCheck.addEventListener('change', (e) => {
-    isAutoHopChecked = e.target.checked;
-    localStorage.setItem('nauvie_is_auto_hop_active', isAutoHopChecked ? 'true' : 'false');
-    localStorage.setItem('nauvie_auto_hop_timer_value', timerSlider.value);
-    
-    if (isAutoHopChecked) {
-      const selectedSeconds = parseInt(timerSlider.value);
-      autoHopTimer = selectedSeconds;
-      countdownSpan.textContent = ` (${autoHopTimer}s)`;
-      showToast('info', `Tự động nhảy phòng đã kích hoạt. Quá trình bắt đầu sau ${autoHopTimer} giây.`);
-    } else {
-      countdownSpan.textContent = '';
-    }
-  });
+  if (autoHopCheck) {
+    autoHopCheck.addEventListener('change', (e) => {
+      isAutoHopChecked = e.target.checked;
+      localStorage.setItem('nauvie_is_auto_hop_active', isAutoHopChecked ? 'true' : 'false');
+      if (timerSlider) localStorage.setItem('nauvie_auto_hop_timer_value', timerSlider.value);
+      
+      if (isAutoHopChecked) {
+        const selectedSeconds = parseInt(timerSlider ? timerSlider.value : '60');
+        autoHopTimer = selectedSeconds;
+        if (countdownSpan) countdownSpan.textContent = ` (${autoHopTimer}s)`;
+        showToast('info', `Tự động nhảy phòng đã kích hoạt. Quá trình bắt đầu sau ${autoHopTimer} giây.`);
+      } else {
+        if (countdownSpan) countdownSpan.textContent = '';
+      }
+    });
+  }
 
-  timerSlider.addEventListener('change', (e) => {
-    localStorage.setItem('nauvie_auto_hop_timer_value', e.target.value);
-    if (isAutoHopChecked) {
-      const selectedSeconds = parseInt(e.target.value);
-      autoHopTimer = selectedSeconds;
-      countdownSpan.textContent = ` (${autoHopTimer}s)`;
-      showToast('info', `Đã đổi thời gian tự động nhảy sang ${formatHopTime(autoHopTimer)}.`);
-    }
-  });
+  if (timerSlider) {
+    timerSlider.addEventListener('change', (e) => {
+      localStorage.setItem('nauvie_auto_hop_timer_value', e.target.value);
+      if (isAutoHopChecked) {
+        const selectedSeconds = parseInt(e.target.value);
+        autoHopTimer = selectedSeconds;
+        if (countdownSpan) countdownSpan.textContent = ` (${autoHopTimer}s)`;
+        showToast('info', `Đã đổi thời gian tự động nhảy sang ${formatHopTime(autoHopTimer)}.`);
+      }
+    });
+  }
 
-  // Random Quick Hop
-  document.getElementById('quick-join-btn').addEventListener('click', () => {
-    performRandomQuickJoin();
-  });
+  // Random Quick Join
+  const quickJoinBtn = document.getElementById('quick-join-btn');
+  if (quickJoinBtn) {
+    quickJoinBtn.addEventListener('click', () => {
+      performRandomQuickJoin();
+    });
+  }
 
   // Chuyển đổi Tab (Danh sách server / Hướng dẫn cày cuốc)
   const tabServers = document.getElementById('tab-btn-servers');
