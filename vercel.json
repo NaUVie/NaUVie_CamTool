@@ -1,13 +1,11 @@
 {
-  "version": 2,
-  "framework": null,
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/SAE", "dest": "/public/sae.html" },
-    { "src": "/sae", "dest": "/public/sae.html" },
-    { "src": "/GG", "dest": "/public/gg.html" },
-    { "src": "/gg", "dest": "/public/gg.html" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/SAE", "destination": "/sae.html" },
+    { "source": "/sae", "destination": "/sae.html" },
+    { "source": "/GG", "destination": "/gg.html" },
+    { "source": "/gg", "destination": "/gg.html" }
   ]
 }
+
 

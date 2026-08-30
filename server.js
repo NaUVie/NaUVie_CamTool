@@ -29,11 +29,10 @@ const SYNC_INTERVAL = 12 * 1000;
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Explicit page routes for /SAE and /GG
+// Clean URL routes
 app.get(['/SAE', '/sae'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'sae.html'));
 });
-
 app.get(['/GG', '/gg'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'gg.html'));
 });
