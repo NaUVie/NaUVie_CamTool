@@ -3,13 +3,13 @@
   "framework": null,
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/SAE/?", "dest": "/public/sae.html" },
-    { "src": "/sae/?", "dest": "/public/sae.html" },
-    { "src": "/GG/?", "dest": "/public/gg.html" },
-    { "src": "/gg/?", "dest": "/public/gg.html" },
-    { "src": "/secret/?", "dest": "/public/secret.html" },
-    { "src": "/SECRET/?", "dest": "/public/secret.html" },
-    { "src": "/Secret/?", "dest": "/public/secret.html" },
+    { "src": "/SAE/?", "dest": "/sae.html" },
+    { "src": "/sae/?", "dest": "/sae.html" },
+    { "src": "/GG/?", "dest": "/gg.html" },
+    { "src": "/gg/?", "dest": "/gg.html" },
+    { "src": "/secret/?", "dest": "/secret.html" },
+    { "src": "/SECRET/?", "dest": "/secret.html" },
+    { "src": "/Secret/?", "dest": "/secret.html" },
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
