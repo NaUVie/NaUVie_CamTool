@@ -1,8 +1,26 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+
+// Simple .env parser to ensure environment variables are loaded if .env exists
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#')) {
+      const [key, ...vals] = trimmed.split('=');
+      if (key && vals.length > 0) {
+        process.env[key.trim()] = vals.join('=').trim();
+      }
+    }
+  });
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
 
 const GAMES = {
   '98664161516921': 'Catch a Monster',
@@ -36,6 +54,95 @@ app.get(['/SAE', '/sae'], (req, res) => {
 app.get(['/GG', '/gg'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'gg.html'));
 });
+app.get(['/secret', '/secret.html', '/SECRET', '/Secret'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'secret.html'));
+});
+
+// Admin Auth API
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body || {};
+  const validUsername = process.env.ADMIN_USERNAME || 'Admin';
+  const validPassword = process.env.ADMIN_PASSWORD || 'Trieu25032005@';
+
+  if (username === validUsername && password === validPassword) {
+    return res.json({
+      success: true,
+      token: 'nauvie_secret_admin_authenticated_' + Date.now(),
+      message: 'Đăng nhập thành công!'
+    });
+  }
+
+  return res.status(401).json({
+    success: false,
+    error: 'Tài khoản hoặc mật khẩu không chính xác!'
+  });
+});
+
+// Fetch Game Name / Details from Roblox API by Place ID
+app.get('/api/game-info', async (req, res) => {
+  const placeId = req.query.placeId || req.query.place_id;
+  if (!placeId) {
+    return res.status(400).json({ success: false, error: 'Thiếu Place ID' });
+  }
+
+  // Check static list first for ultra speed
+  if (GAMES[placeId]) {
+    return res.json({
+      success: true,
+      placeId,
+      name: GAMES[placeId]
+    });
+  }
+
+  try {
+    // 1st attempt: Roblox multiget-place-details API
+    const url = `https://games.roblox.com/v1/games/multiget-place-details?placeIds=${placeId}`;
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0 && data[0].name) {
+        return res.json({
+          success: true,
+          placeId,
+          name: data[0].name
+        });
+      }
+    }
+
+    // 2nd attempt: Roblox Universe Place API fallback
+    const universeUrl = `https://apis.roblox.com/universes/v1/places/${placeId}`;
+    const univRes = await fetch(universeUrl);
+    if (univRes.ok) {
+      const univData = await univRes.json();
+      if (univData.name) {
+        return res.json({
+          success: true,
+          placeId,
+          name: univData.name
+        });
+      }
+    }
+
+    // Fallback if Roblox API does not return name
+    return res.json({
+      success: true,
+      placeId,
+      name: `Roblox Game (${placeId})`
+    });
+  } catch (error) {
+    console.error(`[GAME-INFO ERROR] Failed for placeId ${placeId}:`, error.message);
+    return res.json({
+      success: true,
+      placeId,
+      name: `Roblox Game (${placeId})`
+    });
+  }
+});
 
 // Fetch ascending empty servers directly from Roblox API (limit 100)
 async function fetchRobloxServers(placeId) {
@@ -64,7 +171,7 @@ async function fetchRobloxServers(placeId) {
   }
 }
 
-// Centered background worker for all games
+// Centered background worker for pre-configured games
 async function syncRobloxCache() {
   for (const placeId of Object.keys(GAMES)) {
     const result = await fetchRobloxServers(placeId);
@@ -126,8 +233,8 @@ app.listen(PORT, () => {
   console.log(`==================================================`);
   console.log(`ROBLOX SERVER HOP RUNNING (MULTI-GAME MODE)`);
   console.log(`Local Access: http://localhost:${PORT}`);
+  console.log(`Secret All-Game Page: http://localhost:${PORT}/secret`);
   console.log(`Supported Games:`);
   Object.entries(GAMES).forEach(([id, name]) => console.log(` - ${name}: ${id}`));
   console.log(`==================================================`);
 });
-
